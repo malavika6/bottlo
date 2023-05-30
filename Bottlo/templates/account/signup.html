@@ -19,19 +19,28 @@
                                     <form action="{% url 'signup' %}" method="POST">
                                         {% csrf_token %}
                                         <div class="form-group">
-                                            <input type="text" required="" name="username" placeholder="Username">
+                                            
+                                            {{form.first_name}}
                                         </div>
                                         <div class="form-group">
-                                            <input type="text" required="" name="email" placeholder="Email">
+                                            
+                                            {{form.last_name}}
                                         </div>
                                         <div class="form-group">
-                                            <input type="number" required="" name="phone_number" placeholder="Moblie number">
+                                            
+                                            {{form.email}}
                                         </div>
                                         <div class="form-group">
-                                            <input required="" type="password" name="password" placeholder="Password">
+                                           
+                                            {{form.phone_number}}
                                         </div>
                                         <div class="form-group">
-                                            <input required="" type="password" name="password" placeholder="Confirm password">
+                                            
+                                            {{form.password}}
+                                        </div>
+                                        <div class="form-group">
+                                    
+                                            {{form.confirm_password}}
                                         </div>
                                         <div class="form-group"style="text-align: center;">
                                             <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login">Register</button>
