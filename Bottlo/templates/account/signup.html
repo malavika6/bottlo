@@ -42,6 +42,8 @@
                                     
                                             {{form.confirm_password}}
                                         </div>
+                                        {{ form.email.error}}
+                                        {{form.non_field_errors}}
                                         <div class="form-group"style="text-align: center;">
                                             <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login">Register</button>
                                         </div>
