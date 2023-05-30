@@ -9209,6 +9209,7 @@ span.fi-rs-apps {
   margin-right: 200px !important;
 }
 
+
 @media only screen and (max-width: 768px) {
   .logo.logo-width-1 {
     margin-right: 0;
@@ -9921,4 +9922,5 @@ span.fi-rs-apps {
 }
 .zoomContainer{ z-index: 9999;}
 .zoomWindow{ z-index: 9999;}
+
 /*# sourceMappingURL=main.css.map */
