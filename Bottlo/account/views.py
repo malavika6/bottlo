@@ -24,17 +24,23 @@ def signup(request):
     return render(request,"account/signup.html",context)
 def login(request):
     if request.method == "POST":
-            email = request.POST['email']
-            password = request.POST['password']
-             
-            myuser=auth.authenticate(email=email,password=password)
-            if myuser is not None:
-                auth.login(request,myuser)
-                return redirect('home')
+        email = request.POST['email']
+        password = request.POST['password']
+        
+        myuser = auth.authenticate(email=email, password=password)
+        
+        if myuser is not None:
+            auth.login(request, myuser)
+            
+            if myuser.is_superadmin:  # Corrected attribute name
+                return redirect('supuser')
             else:
-                 messages.error(request,"Invalid login credentials")
-                 return redirect('login')
-    return render(request,"account/login.html")        
+                return redirect('home')
+        else:
+            messages.error(request, "Invalid login credentials")
+            return redirect('login')
+    
+    return render(request, "account/login.html")        
 def logout(request):
     return render(request,"account/logout.html")
 
