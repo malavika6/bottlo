@@ -5325,6 +5325,9 @@
 .md-smart_button:after {
   content: '\e830';
 }
+.md-category:after{
+  content: "\f117";
+}
 
 .md-snippet_folder:after {
   content: '\e831';
