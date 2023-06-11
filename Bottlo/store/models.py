@@ -16,7 +16,12 @@ class product(models.Model):
 
     def __str__(self):
         return self.product_name
-    
+class ProductImage(models.Model):
+    product = models.ForeignKey(product, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='photos/products')
+
+    def __str__(self):
+        return self.image.url
     
     
 
