@@ -47,9 +47,10 @@
                         <div class="info-wrap">
                             <a href="#" class="title text-truncate">{{products.product_name}}</a>
                             <div class="price mb-2">${{products.price}} </div> <!-- price.// -->
-                            <a href="#" class="btn btn-sm font-sm rounded btn-brand">
+                            <a href="{% url 'edit_product' products.id %}" class="btn btn-sm font-sm rounded btn-brand">
                                 <i class="material-icons md-edit"></i> Edit
                             </a>
+                            
                             <form action="{% url 'del_product' products.id %}" method="post" class="d-inline">
                                 {% csrf_token %}
                                 <input type="submit" class="btn btn-sm font-sm btn-light rounded" onclick="return confirm('Are you sure you want to delete this product?')" value="Delete">
