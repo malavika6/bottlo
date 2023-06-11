@@ -32,7 +32,7 @@ def login(request):
         if myuser is not None:
             auth.login(request, myuser)
             
-            if myuser.is_superadmin:  # Corrected attribute name
+            if request.user.is_superadmin: 
                 return redirect('supuser')
             else:
                 return redirect('home')
