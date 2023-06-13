@@ -37,22 +37,25 @@ def add_product(request):
     return render(request, 'supuser/add_product.html', context)
 
 def edit_product(request, id):
+    print("reach")
     
     products = get_object_or_404(product, id=id)
+    print(products)
 
     if request.method == 'POST':
+        print("post")
 
-        form = ProductEditForm(request.POST, instance=products)
+        form = ProductEditForm(request.POST,request.FILES, instance=products)
         if form.is_valid():
             form.save()
             return redirect('product')
         else:
             print(form.errors)
     else:
-        print('h')
+        print('notpost')
         form = ProductEditForm(instance=products)
 
-    return render(request, 'supuser/edit_product.html', {'form': form, 'product': products})
+    return render(request, 'supuser/edit_product.html', {'form': form, 'products': products})
 
 
 
