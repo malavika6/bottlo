@@ -158,29 +158,18 @@
                     </a>
                     <div class="categori-dropdown-wrap categori-dropdown-active-small">
                         <ul>
-                            <li><a href="shop-grid-right.html">Alicia Souza</a>
-                                <a href="shop-grid-right.html">All Hue</a>
-
-                            </li>
-                            <li>
-                                <a href="shop-grid-right.html">Chrome</a>
-                                
-                            </li>
-                            <li><a href="shop-grid-right.html">Matte</a></li>
-                            <li><a href="shop-grid-right.html">Monochrome</a></li>
-                            <li><a href="shop-grid-right.html">Neon</a></li>
-                            <li><a href="shop-grid-right.html">Pastel</a></li>
-                            <li><a href="shop-grid-right.html">Lid</a></li>
-                            <li><a href="shop-grid-right.html">Accessories</a></li>
+                            {% for categories in category %}
+                            <li><a href="shop-grid-right.html">{{categories.category_name}}</a></li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
                 <!-- mobile menu start -->
                 <nav>
                     <ul class="mobile-menu">
-                        <li class="menu-item-has-children"><span class="menu-expand"></span><a href="index.html">Home</a>
+                        <li class="menu-item-has-children"><span class="menu-expand"></span><a href="{% url 'home' %}">Home</a>
                         </li>
-                        <li class="menu-item-has-children"><span class="menu-expand"></span><a href="shop-grid-right.html">shop</a>
+                        <li class="menu-item-has-children"><span class="menu-expand"></span><a href="{% url 'store' %}">shop</a>
                         </li>
                         <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Pages</a>
                             <ul class="dropdown">
@@ -323,20 +312,9 @@
                         </a>
                         <div class="categori-dropdown-wrap categori-dropdown-active-large">
                             <ul>
-                                <li><a href="shop-grid-right.html">Alicia Souza</a>
-                                    <a href="shop-grid-right.html">All Hue</a>
-
-                                </li>
-                                <li>
-                                    <a href="shop-grid-right.html">Chrome</a>
-                                    
-                                </li>
-                                <li><a href="shop-grid-right.html">Matte</a></li>
-                                <li><a href="shop-grid-right.html">Monochrome</a></li>
-                                <li><a href="shop-grid-right.html">Neon</a></li>
-                                <li><a href="shop-grid-right.html">Pastel</a></li>
-                                <li><a href="shop-grid-right.html">Lid</a></li>
-                                <li><a href="shop-grid-right.html">Accessories</a></li>
+                                {% for categories in category %}
+                                <li><a href="shop-grid-right.html">{{categories.category_name}}</a></li>
+                                {% endfor %}
                                 
 
                             </ul>
@@ -346,11 +324,9 @@
                     <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block">
                         <nav>
                             <ul>
-                                <li><a class="active" href="index.html">Home </a></li>
-                                <li>
-                                    <a href="page-about.html">About</a>
-                                </li>
-                                <li><a href="shop-grid-right.html">Shop </a>
+                                <li><a class="active" href="{% url 'home' %}">Home </a></li>
+                                
+                                <li><a href="{% url 'store' %}">Shop </a>
                                     
                                 <li><a href="#">Pages <i class="fi-rs-angle-down"></i></a>
                                     <ul class="sub-menu">

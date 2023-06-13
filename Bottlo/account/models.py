@@ -40,7 +40,7 @@ class Account(AbstractBaseUser):
     last_name = models.CharField(max_length=50)
     email = models.EmailField(max_length=100, unique=True)
     phone_number = models.CharField(max_length=50)
-    is_verified     =models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False)
 
 # required
     date_joined = models.DateTimeField(auto_now_add=True)
@@ -51,16 +51,15 @@ class Account(AbstractBaseUser):
     is_superadmin = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name','phone_number']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'phone_number']
 
     objects = MyAccountManager()
-
 
     def __str__(self):
         return self.email
 
-    def has_perm(self,perm,obj=None):
+    def has_perm(self, perm, obj=None):
         return self.is_admin
 
-    def has_module_perms(self,add_label):
+    def has_module_perms(self, add_label):
         return True
