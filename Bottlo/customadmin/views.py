@@ -21,13 +21,14 @@ def product_list(request):
 
 
 def add_product(request):
+
     if request.method == 'POST':
+   
         form = ProductEditForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('product')
     else:
-        print("hi")
         form = ProductEditForm()
 
     context = {
@@ -35,9 +36,19 @@ def add_product(request):
     }
     return render(request, 'supuser/add_product.html', context)
 
+def add_products(request):
+
+    form = ProductEditForm(request.POST, request.FILES)
+    if form.is_valid():
+        form.save()
+        return redirect('product')
+    else:
+        print(form.errors)
+    return redirect('product')
+
+
 
 def edit_product(request, id):
-    print("reach")
 
     products = get_object_or_404(product, id=id)
     print(products)
