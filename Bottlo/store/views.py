@@ -24,7 +24,7 @@ def store(request, category_slug=None):
     context = {
         "product": products,
         "product_count": products.count,
-        "category":categories,
+        "categories":categories,
 
         }
     return render(request, "store/store.html", context)
