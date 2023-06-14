@@ -5,9 +5,7 @@ from django.http import HttpResponse
 
 
 
-def cart(request):
 
-    return render(request, 'store/cart.html')
 def _cart_id(request):
     cart = request.session.session_key
     if not cart:
@@ -40,4 +38,8 @@ def add_cart(request, product_id):
     exit()
    
     return redirect('cart')
+
+def cart(request):
+
+    return render(request, 'store/cart.html')
 
