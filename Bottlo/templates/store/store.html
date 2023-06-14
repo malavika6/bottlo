@@ -126,8 +126,8 @@
                     <div class="widget-category mb-30">
                         <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category</h5>
                         <ul class="categories">
-                            {% for categories in category %}
-                            <li><a href="shop-grid-right.html">{{categories.category_name}}</a></li>
+                            {% for category in links %}
+                            <li><a href="{{ category.get_url}}">{{category.category_name}}</a></li>
                             {% endfor %}
                             
                         </ul>
