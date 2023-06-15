@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from .forms import Registrationform,VerifyForm
 from . models import Account
 from django.contrib import messages, auth
-from .import verify
+from . import verify
+
 
 
 def signup(request):
@@ -21,7 +22,7 @@ def signup(request):
             user.save()
             verify.send(phone_number)
             messages.success(request, "Registration successfull")
-            return redirect('login')
+            return redirect('verify_code')
     context = {
         'form': form,
     }
@@ -37,31 +38,40 @@ def verify_code(request):
             if verify.check(request.user.phone_number, code):
                 request.user.is_verified = True
                 request.user.save()
+                auth.login(request, request.user)
                 return redirect('login')
     else:
         form = VerifyForm()
     return render(request, "account/verify.html", {'form': form})
 
 
+
 def login(request):
     if request.method == "POST":
-        email = request.POST['email']
-        password = request.POST['password']
+        email = request.POST.get('email')
+        password = request.POST.get('password')
 
-        myuser = auth.authenticate(email=email, password=password)
+        if email and password:
+            myuser = auth.authenticate(email=email, password=password)
 
-        if myuser is not None:
-            auth.login(request, myuser)
+            if myuser is not None:
+                auth.login(request, myuser)
 
-            if request.user.is_superadmin:
-                return redirect('supuser')
+                if request.user.is_superadmin:
+                    return redirect('supuser')
+                else:
+                    return redirect('home')
             else:
-                return redirect('home')
+                messages.error(request, "Invalid login credentials")
+                print("Invalid login credentials")
         else:
-            messages.error(request, "Invalid login credentials")
-            return redirect('login')
-
+            messages.error(request, "Email and password are required.")
+            print("Email and password are required.")
+    
     return render(request, "account/login.html")
+
+
+
 
 
 def logout(request):

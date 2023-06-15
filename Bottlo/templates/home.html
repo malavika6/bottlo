@@ -120,14 +120,9 @@
                 <div class="tab-header">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Featured</button>
+                            <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">New Collection</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two" aria-selected="false">Popular</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="nav-tab-three" data-bs-toggle="tab" data-bs-target="#tab-three" type="button" role="tab" aria-controls="tab-three" aria-selected="false">New added</button>
-                        </li>
+                      
                     </ul>
                     <a href="#" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a>
                 </div>
@@ -148,7 +143,7 @@
                                             </a>
                                         </div>
                                         <div class="product-action-1">
-                                            <a aria-label="Quick view" class="action-btn hover-up" href="{{product.get_url}}" ><i class="fi-rs-eye"></i></a>
+                                            <a aria-label="Quick view" class="action-btn hover-up" href="{{products.get_url}}" ><i class="fi-rs-eye"></i></a>
                                             <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
                                             
                                         </div>
@@ -182,7 +177,7 @@
                         <!--End product-grid-4-->
                     </div>
                     <!--En tab one (Featured)-->
-                    <div class="tab-pane fade" id="tab-two" role="tabpanel" aria-labelledby="tab-two">
+                    {% comment %} <div class="tab-pane fade" id="tab-two" role="tabpanel" aria-labelledby="tab-two">
                         <div class="row product-grid-4">
                             <div class="col-lg-3 col-md-4 col-12 col-sm-6">
                                 <div class="product-cart-wrap mb-30">
@@ -486,9 +481,9 @@
                             </div>
                         </div>
                         <!--End product-grid-4-->
-                    </div>
+                    </div> {% endcomment %}
                     <!--En tab two (Popular)-->
-                    <div class="tab-pane fade" id="tab-three" role="tabpanel" aria-labelledby="tab-three">
+                    {% comment %} <div class="tab-pane fade" id="tab-three" role="tabpanel" aria-labelledby="tab-three">
                         <div class="row product-grid-4">
                             <div class="col-lg-3 col-md-4 col-12 col-sm-6">
                                 <div class="product-cart-wrap mb-30">
@@ -792,7 +787,7 @@
                             </div>
                         </div>
                         <!--End product-grid-4-->
-                    </div>
+                    </div> {% endcomment %}
                     <!--En tab three (New added)-->
                 </div>
                 <!--End tab-content-->
@@ -819,9 +814,9 @@
                         {% for category in links %}
                         <div class="card-1">
                             <figure class=" img-hover-scale overflow-hidden">
-                                <a href="shop-grid-right.html"><img src="{{category.cat_image.url}}" alt=""></a>
+                                <a href="{{ category.get_url}}"><img src="{{category.cat_image.url}}" alt=""></a>
                             </figure>
-                            <h5><a href="shop-grid-right.html">{{category.category_name}} </a></h5>
+                            <h5><a href="{{ category.get_url}}">{{category.category_name}} </a></h5>
                         </div>
                         
                         {% endfor %}
