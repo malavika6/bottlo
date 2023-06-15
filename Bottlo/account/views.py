@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
-from .forms import Registrationform
+from .forms import Registrationform,VerifyForm
 from . models import Account
 from django.contrib import messages, auth
+from .import verify
 
 
 def signup(request):
@@ -18,12 +19,28 @@ def signup(request):
             user = Account.objects.create_user(
                 first_name=first_name, last_name=last_name, phone_number=phone_number, email=email, password=password)
             user.save()
+            verify.send(phone_number)
             messages.success(request, "Registration successfull")
             return redirect('login')
     context = {
         'form': form,
     }
     return render(request, "account/signup.html", context)
+
+
+
+def verify_code(request):
+    if request.method == 'POST':
+        form = VerifyForm(request.POST)
+        if form.is_valid():
+            code = form.cleaned_data.get('code')
+            if verify.check(request.user.phone_number, code):
+                request.user.is_verified = True
+                request.user.save()
+                return redirect('login')
+    else:
+        form = VerifyForm()
+    return render(request, "account/verify.html", {'form': form})
 
 
 def login(request):

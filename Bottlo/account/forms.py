@@ -28,3 +28,7 @@ class Registrationform(forms.ModelForm):
 
         if password != confirm_password:
             raise forms.ValidationError("Password does not match!")
+        
+class VerifyForm(forms.Form):
+    code = forms.CharField(max_length=8, required=True, help_text='Enter code')
+
