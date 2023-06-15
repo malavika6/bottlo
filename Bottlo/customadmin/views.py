@@ -54,7 +54,7 @@ def edit_product(request, id):
     print(products)
 
     if request.method == 'POST':
-        print("post")
+       
 
         form = ProductEditForm(request.POST, request.FILES, instance=products)
         if form.is_valid():

@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
 from store.models import product
 from .models import Cart, Cartitem
-from django.http import HttpResponse 
-
-
+from django.http import HttpResponse
 
 
 def _cart_id(request):
@@ -11,6 +9,7 @@ def _cart_id(request):
     if not cart:
         cart = request.session.create()
     return cart
+
 
 def add_cart(request, product_id):
     Product = product.objects.get(id=product_id)
@@ -36,10 +35,10 @@ def add_cart(request, product_id):
 
     return HttpResponse(cart_item.product)
     exit()
-   
+
     return redirect('cart')
+
 
 def cart(request):
 
     return render(request, 'store/cart.html')
-
