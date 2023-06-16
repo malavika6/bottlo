@@ -35,10 +35,9 @@ def add_cart(request, product_id):
 
     return HttpResponse(cart_item.product)
     exit()
-
     return redirect('cart')
 
 
-def cart(request):
+def cart(request, total=0 ,quantity=0):
 
     return render(request, 'store/cart.html')
