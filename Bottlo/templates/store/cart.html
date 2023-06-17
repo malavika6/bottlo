@@ -25,7 +25,7 @@
                             <tr>
                                 <td class="image product-thumbnail"><img src="{{ cart_item.product.image.url}}" alt="#"></td>
                                 <td class="product-des product-name">
-                                    <h5 class="product-name"><a href="shop-product-right.html">{{ cart_item.product.product_name}}</a></h5>
+                                    <h5 class="product-name"><a href="{{products.get_url}}">{{ cart_item.product.product_name}}</a></h5>
                                     <p class="font-xs">{{ cart_item.product.category.category_name}}
                                     </p>
                                 </td>
@@ -365,15 +365,15 @@
                                     <tbody>
                                         <tr>
                                             <td class="cart_total_label">Cart Subtotal</td>
-                                            <td class="cart_total_amount"><span class="font-lg fw-900 text-brand">$240.00</span></td>
+                                            <td class="cart_total_amount"><span class="font-lg fw-900 text-brand">₹{{total}}</span></td>
                                         </tr>
                                         <tr>
-                                            <td class="cart_total_label">Shipping</td>
-                                            <td class="cart_total_amount"> <i class="ti-gift mr-5"></i> Free Shipping</td>
+                                            <td class="cart_total_label">Tax</td>
+                                            <td class="cart_total_amount"><span class="font-lg fw-900 text-brand">₹{{tax}}</span></td>
                                         </tr>
                                         <tr>
                                             <td class="cart_total_label">Total</td>
-                                            <td class="cart_total_amount"><strong><span class="font-xl fw-900 text-brand">$240.00</span></strong></td>
+                                            <td class="cart_total_amount"><strong><span class="font-xl fw-900 text-brand">₹{{grand_total}}</span></strong></td>
                                         </tr>
                                     </tbody>
                                 </table>
