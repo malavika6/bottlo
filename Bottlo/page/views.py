@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from store.models import product
+from store.models import Product
 from category.models import category
 
 
 def home(request):
-    products = product.objects.all().filter(is_available=True)
+    products = Product.objects.all().filter(is_available=True)
 
     context = {
         "product": products,}

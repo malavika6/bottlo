@@ -1,10 +1,10 @@
 from django import forms
-from store.models import product
+from store.models import Product
 
 
 class ProductEditForm(forms.ModelForm):
     class Meta:
-        model = product
+        model = Product
         fields = ["product_name","slug", "description", "price",
                   "stock", "image", "is_available", "category"]
         widgets = {

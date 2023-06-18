@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from store.admin import ProductAdmin
-from store.models import product
+from store.models import Product
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import ProductEditForm
 from category.models import category
@@ -11,7 +11,7 @@ def supuser(request):
 
 
 def product_list(request):
-    products = product.objects.all().filter(is_available=True)
+    products = Product.objects.all().filter(is_available=True)
 
     context = {
         "product": products,
@@ -50,7 +50,7 @@ def add_products(request):
 
 def edit_product(request, id):
 
-    products = get_object_or_404(product, id=id)
+    products = get_object_or_404(Product, id=id)
     print(products)
 
     if request.method == 'POST':
@@ -71,6 +71,6 @@ def edit_product(request, id):
 
 def del_product(request, id):
     if request.method == 'POST':
-        prod = product.objects.get(id=id)
+        prod = Product.objects.get(id=id)
         prod.delete()
     return redirect('product')

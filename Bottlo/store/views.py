@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import product
+from .models import Product
 from category.models import category
 
 # Create your views here.
@@ -11,12 +11,12 @@ def store(request, category_slug=None):
 
     if category_slug != None:
         categories = get_object_or_404(category, slug=category_slug)
-        products = product.objects.filter(
+        products = Product.objects.filter(
             category=categories, is_available=True)
         product_count = products.count()
 
     else:
-        products = product.objects.all().filter(is_available=True)
+        products = Product.objects.all().filter(is_available=True)
         product_count = products.count()
         categories = category.objects.all()
 
@@ -31,7 +31,7 @@ def store(request, category_slug=None):
 
 def product_details(request,category_slug,product_slug):
     try:
-        single_product = product.objects.get(category__slug=category_slug, slug=product_slug)
+        single_product = Product.objects.get(category__slug=category_slug, slug=product_slug)
     except Exception as e :
         raise e
 

@@ -8,55 +8,54 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <div class="table-responsive">
-                    <table class="table shopping-summery text-center clean">
-                        <thead>
-                            <tr class="main-heading">
-                                <th scope="col">Image</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Subtotal</th>
-                                <th scope="col">Remove</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for cart_item in cart_items %}
-                            <tr>
-                                <td class="image product-thumbnail"><img src="{{ cart_item.product.image.url}}" alt="#"></td>
-                                <td class="product-des product-name">
-                                    <h5 class="product-name"><a href="{{products.get_url}}">{{ cart_item.product.product_name}}</a></h5>
-                                    <p class="font-xs">{{ cart_item.product.category.category_name}}
-                                    </p>
-                                </td>
-                                <td class="price" data-title="Price"><span>₹{{ cart_item.product.price}} </span></td>
-                                <td class="text-center" data-title="Stock">
-                                    <div class="detail-qty border radius  m-auto">
-                                      
-
-                                        <a href="" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                        <span class="qty-val">{{cart_item.quantity}}</span>
-                                        <a href="{% url 'add_cart' cart_item.product.id %}" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
-                                    </div>
-                                </td>
-                                <td class="text-right" data-title="Cart">
-                                    <span>₹{{ cart_item.sub_total}} </span>
-                                </td>
-                                <td class="action" data-title="Remove"><a href="#" class="text-muted"><i class="fi-rs-trash"></i></a></td>
-                            </tr>
-                            {% endfor %}
-                          
-                            <tr>
-                                <td colspan="6" class="text-end">
-                                    <a href="#" class="text-muted"> <i class="fi-rs-cross-small"></i> Clear Cart</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="cart-action text-end">
-                    <a class="btn  mr-10 mb-sm-15"><i class="fi-rs-shuffle mr-10"></i>Update Cart</a>
-                    <a class="btn "><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
+                {% if not cart_items %}
+                <div class="text-center">
+                    <h4>Your Shopping Cart is Empty</h4>
+                {% else%}
+                    <div class="table-responsive">
+                        <table class="table shopping-summery text-center clean">
+                            <thead>
+                                <tr class="main-heading">
+                                    <th scope="col">Image</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Subtotal</th>
+                                    <th scope="col">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cart_item in cart_items %}
+                                <tr>
+                                    <td class="image product-thumbnail"><img src="{{ cart_item.product.image.url}}" alt="#"></td>
+                                    <td class="product-des product-name">
+                                        <h5 class="product-name"><a href="{{products.get_url}}">{{ cart_item.product.product_name}}</a></h5>
+                                        <p class="font-xs">{{ cart_item.product.category.category_name}}
+                                        </p>
+                                    </td>
+                                    <td class="price" data-title="Price"><span>₹{{ cart_item.product.price}} </span></td>
+                                    <td class="text-center" data-title="Stock">
+                                        <div class="detail-qty border radius m-auto">
+                                            <a href="{% url 'remove_cart' cart_item.product.id %}" class="qty-down" data-remove-url=""><i class="fi-rs-angle-small-down"></i></a>
+                                            <span class="qty-val">{{ cart_item.quantity }}</span>
+                                            <a href="{% url 'add_cart' cart_item.product.id %}" class="qty-up" data-add-url=""><i class="fi-rs-angle-small-up"></i></a>
+                                        </div>
+                                    </td>
+                                    <td class="text-right" data-title="Cart">
+                                        <span>₹{{ cart_item.sub_total}} </span>
+                                    </td>
+                                    <td class="action" data-title="Remove"><a href="{% url 'del_cart' cart_item.product.id %}" class="text-muted"><i class="fi-rs-trash"></i></a></td>
+                                </tr>
+                                {% endfor %}
+                            
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}   
+                <div class="cart-action text-end ">
+                    
+                    <a href="{% url 'store' %}" class="btn "><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
                 </div>
                 <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
                 <div class="row mb-50">

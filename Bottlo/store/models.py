@@ -5,7 +5,7 @@ from django.urls import reverse
 # Create your models here.
 
 
-class product(models.Model):
+class Product(models.Model):
     product_name = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True)
     description = models.TextField(max_length=500, blank=True)
@@ -27,7 +27,7 @@ class product(models.Model):
 
 
 class ProductImage(models.Model):
-    product = models.ForeignKey(product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='photos/products')
 
     def __str__(self):

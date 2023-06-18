@@ -63,24 +63,57 @@
             });
         });
         //Qty Up-Down
-        $('.detail-qty').each(function () {
-            var qtyval = parseInt($(this).find('.qty-val').text(), 10);
-            $('.qty-up').on('click', function (event) {
-                event.preventDefault();
-                qtyval = qtyval + 1;
-                $(this).prev().text(qtyval);
-            });
-            $('.qty-down').on('click', function (event) {
-                event.preventDefault();
-                qtyval = qtyval - 1;
-                if (qtyval > 1) {
-                    $(this).next().text(qtyval);
-                } else {
-                    qtyval = 1;
-                    $(this).next().text(qtyval);
-                }
-            });
-        });
+        // $('.detail-qty').each(function () {
+        //     var qtyval = parseInt($(this).find('.qty-val').text(), 10);
+        //     $('.qty-up').on('click', function (event) {
+        //         event.preventDefault();
+        //         qtyval = qtyval + 1;
+        //         $(this).prev().text(qtyval);
+        //     });
+        //     $('.qty-down').on('click', function (event) {
+        //         event.preventDefault();
+        //         qtyval = qtyval - 1;
+        //         if (qtyval > 1) {
+        //             $(this).next().text(qtyval);
+        //         } else {
+        //             qtyval = 1;
+        //             $(this).next().text(qtyval);
+        //         }
+        //     });
+        // });
+      
+
+
+        // $(document).ready(function () {
+        //     $('.detail-qty').each(function () {
+        //         var qtyval = parseInt($(this).find('.qty-val').text(), 10);
+    
+        //         $(this).find('.qty-up').on('click', function (event) {
+        //             event.preventDefault();
+        //             qtyval = qtyval + 1;
+        //             $(this).prev().text(qtyval);
+        //             var addUrl = $(this).data('add-url');
+        //             console.log(addUrl);
+        //             // Use the addUrl variable where needed
+        //         });
+    
+        //         $(this).find('.qty-down').on('click', function (event) {
+        //             event.preventDefault();
+        //             qtyval = qtyval - 1;
+        //             if (qtyval > 1) {
+        //                 $(this).next().text(qtyval);
+        //             } else {
+        //                 qtyval = 1;
+        //                 $(this).next().text(qtyval);
+        //             }
+        //             var removeUrl = $(this).data('remove-url');
+        //             console.log(removeUrl);
+        //             // Use the removeUrl variable where needed
+        //         });
+        //     });
+        // });
+
+
 
         $('.dropdown-menu .cart_list').on('click', function (event) {
             event.stopPropagation();
