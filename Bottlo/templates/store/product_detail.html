@@ -88,9 +88,13 @@
                                         <span class="qty-val">1</span>
                                         <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
                                     </div>
+                                    
                                     <div class="product-extra-link2">
+                                        {% if single_product.stock <=0 %}
+                                        <h2 class ="text-Danger">Out Of Stock</h2>
+                                        {% else %}
                                         <button type="submit" class="button button-add-to-cart" onclick="window.location.href='{% url 'add_cart' single_product.id %}'">Add to cart</button>
-
+                                        {% endif %}
                                         <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
                                         <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
                                     </div>
