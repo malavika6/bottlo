@@ -36,22 +36,11 @@ def add_product(request):
     }
     return render(request, 'supuser/add_product.html', context)
 
-def add_products(request):
-
-    form = ProductEditForm(request.POST, request.FILES)
-    if form.is_valid():
-        form.save()
-        return redirect('product')
-    else:
-        print(form.errors)
-    return redirect('product')
-
 
 
 def edit_product(request, id):
 
     products = get_object_or_404(Product, id=id)
-    print(products)
 
     if request.method == 'POST':
        

@@ -59,24 +59,57 @@ def del_cart(request,product_id):
     return redirect('cart')        
 
 
-def cart(request, total=0 ,quantity=0,cart_items =None):
+def cart(request):
+    total = 0
+    quantity = 0
+    cart_items = None
+    tax = 0
+    grand_total = 0
+    
     try:
-        cart=Cart.objects.get(cart_id=_cart_id(request))
-        cart_items=Cartitem.objects.filter(cart =cart,is_active=True)
+        cart = Cart.objects.get(cart_id=_cart_id(request))
+        cart_items = Cartitem.objects.filter(cart=cart, is_active=True)
         for cart_item in cart_items:
-            total+=(cart_item.product.price*cart_item.quantity)
-            quantity+=cart_item.quantity
-        tax = (2*total)/100
-        grand_total=total+tax
+            total += (cart_item.product.price * cart_item.quantity)
+            quantity += cart_item.quantity
+        tax = (2 * total) / 100
+        grand_total = total + tax
     except ObjectDoesNotExist:
         pass
+    
     context = {
-        'total':total,
-        'quantity' : quantity,
-        'cart_items' : cart_items,
+        'total': total,
+        'quantity': quantity,
+        'cart_items': cart_items,
         'tax': tax,
-        'grand_total':grand_total,
-
+        'grand_total': grand_total,
     }
 
-    return render(request,'store/cart.html',context)
+    return render(request, 'store/cart.html', context)
+
+from decimal import Decimal
+
+def checkout(request):
+    cart = Cart.objects.get(cart_id=_cart_id(request))
+    cart_items = Cartitem.objects.filter(cart=cart, is_active=True)
+
+    total = Decimal(0)
+    quantity = 0
+    for cart_item in cart_items:
+        total += cart_item.product.price * cart_item.quantity
+        quantity += cart_item.quantity
+
+        tax = (2 * total) / 100
+        grand_total = total + tax
+
+    context = {
+        'cart_items': cart_items,
+        'total': total,
+        'quantity': quantity,
+        'tax': tax,
+        'grand_total': grand_total,
+    }
+
+    return render(request, 'store/checkout.html', context)
+
+
