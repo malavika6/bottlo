@@ -13,30 +13,29 @@ def _cart_id(request):
 
 
 def add_cart(request, product_id):
-    product =Product.objects.get(id=product_id)
+    product = Product.objects.get(id=product_id)
+    current_user = request.user
     try:
         cart = Cart.objects.get(cart_id=_cart_id(request))
-        
     except Cart.DoesNotExist:
-        cart = Cart.objects.create(
-            cart_id=_cart_id(request)
-            
-        )
+        cart = Cart.objects.create(cart_id=_cart_id(request))
         cart.save()
 
     try:
-        cart_item = Cartitem.objects.get(product=product, cart=cart)
+        cart_item = Cartitem.objects.get(product=product, cart=cart, user=current_user)
         cart_item.quantity += 1
         cart_item.save()
-        
     except Cartitem.DoesNotExist:
         cart_item = Cartitem.objects.create(
             product=product,
             quantity=1,
             cart=cart,
+            user=current_user
         )
         cart_item.save()
+
     return redirect('cart')
+
 
 
 def remove_cart(request,product_id):
@@ -91,7 +90,8 @@ from decimal import Decimal
 
 def checkout(request):
     cart = Cart.objects.get(cart_id=_cart_id(request))
-    cart_items = Cartitem.objects.filter(cart=cart, is_active=True)
+    current_user = request.user
+    cart_items = Cartitem.objects.filter(cart=cart, user=current_user, is_active=True)
 
     total = Decimal(0)
     quantity = 0
@@ -99,8 +99,8 @@ def checkout(request):
         total += cart_item.product.price * cart_item.quantity
         quantity += cart_item.quantity
 
-        tax = (2 * total) / 100
-        grand_total = total + tax
+    tax = (2 * total) / 100
+    grand_total = total + tax
 
     context = {
         'cart_items': cart_items,
@@ -111,5 +111,6 @@ def checkout(request):
     }
 
     return render(request, 'store/checkout.html', context)
+
 
 

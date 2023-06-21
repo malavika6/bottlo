@@ -1,5 +1,6 @@
 from django.db import models
 from store.models import Product
+from account.models import Account
 
 # Create your models here.
 class Cart(models.Model):
@@ -10,6 +11,7 @@ class Cart(models.Model):
         return self.cart_id
 
 class Cartitem(models.Model):
+    user = models.ForeignKey(Account,on_delete=models.CASCADE, null=True)
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     cart    = models.ForeignKey(Cart,on_delete=models.CASCADE, null=True)
     quantity = models.IntegerField()
@@ -18,7 +20,7 @@ class Cartitem(models.Model):
     def sub_total(self):
         return self.product.price*self.quantity
 
-    def __str__(self):
+    def __unicode__(self):
         return self.product
 
 

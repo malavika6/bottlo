@@ -4,6 +4,8 @@ from store.models import Product
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import ProductEditForm
 from category.models import category
+from order.models import Order
+
 
 
 def supuser(request):
@@ -63,3 +65,14 @@ def del_product(request, id):
         prod = Product.objects.get(id=id)
         prod.delete()
     return redirect('product')
+
+
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+def orderslist(request):
+    orders = Order.objects.all().order_by('-created_at')
+    
+    context = {
+        'orders': orders,
+    }
+    return render(request, 'supuser/order_list.html', context)

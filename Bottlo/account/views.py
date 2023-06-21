@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import Registrationform,VerifyForm
 from . models import Account
-from django.contrib import messages, auth
+from django.contrib import messages,auth
 from . import verify
 
 
@@ -49,10 +49,13 @@ def verify_code(request):
 def login(request):
     if request.method == "POST":
         email = request.POST.get('email')
+        print(email)
         password = request.POST.get('password')
+        print(password)
 
         if email and password:
             myuser = auth.authenticate(email=email, password=password)
+            print(email,password)
 
             if myuser is not None:
                 auth.login(request, myuser)

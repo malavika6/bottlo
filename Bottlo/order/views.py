@@ -10,6 +10,7 @@ import datetime
 
 def place_order(request,total = 0, quantity = 0):
     current_user = request.user
+  
     cart_items = Cartitem.objects.filter(user=current_user)
     cart_count = cart_items.count()
     if cart_count <= 0:
@@ -37,7 +38,7 @@ def place_order(request,total = 0, quantity = 0):
             data.country = form.cleaned_data['country']
             data.pincode = form.cleaned_data['pincode']
             data.email = form.cleaned_data['email']
-            data.phone_number = form.cleaned_data['phone']
+            data.phone_number = form.cleaned_data['phone_number']
             data.order_note = form.cleaned_data['order_note']
             data.order_total = grand_total
             data.tax = tax

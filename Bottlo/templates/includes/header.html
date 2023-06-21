@@ -47,7 +47,7 @@
                                 <li><a href="page-about.html">About Us</a></li>
                                 <li><a href="page-contact.html">Contact</a></li>
                                 <li><a href="page-account.html">My Account</a></li>
-                                <li><a href="page-login-register.html">login/register</a></li>
+                                <li><a href="{% url 'signup' %}">login/register</a></li>
                                 <li><a href="page-purchase-guide.html">Purchase Guide</a></li>
                                 <li><a href="page-privacy-policy.html">Privacy Policy</a></li>
                                 <li><a href="page-terms.html">Terms of Service</a></li>
@@ -68,11 +68,20 @@
             </div>
             <div class="mobile-header-info-wrap mobile-header-border">
                 <div class="single-mobile-header-info mt-30">
-                    <a  href="page-contact.html"> Our location </a>
+                    <a href="page-contact.html">Our location</a>
                 </div>
-                <div class="single-mobile-header-info">
-                    <a href="{% url 'signup' %}">Log In / Sign Up </a>
-                </div>
+                {% if user %}
+                    <h4>Welcome, {{ user.first_name }}</h4>
+                    <div class="single-mobile-header-info">
+                        <a href="#">(+01) - 2345 - 6789</a>
+                    </div>
+                {% else %}
+                    <div class="single-mobile-header-info">
+                        <a href="{% url 'signup' %}">Log In / Sign Up</a>
+                    </div>
+                {% endif %}
+            
+            
                 <div class="single-mobile-header-info">
                     <a href="#">(+01) - 2345 - 6789 </a>
                 </div>
@@ -125,8 +134,13 @@
                                 </a>
                                 {% comment %}  {% endcomment %}
                                 <div>
-                                    <li><i class="fi-rs-user"></i><a href="{% url 'signup' %}">Log In / Sign Up</a></li>
+                                    {% if user %}
+                                        <li><i class="fi-rs-user"></i><a href="#">{{ user.first_name }}</a></li>
+                                    {% else %}
+                                        <li><i class="fi-rs-user"></i><a href="{% url 'signup' %}">Log In / Sign Up</a></li>
+                                    {% endif %}
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -168,7 +182,7 @@
                                         <li><a href="page-about.html">About Us</a></li>
                                         <li><a href="page-contact.html">Contact</a></li>
                                         <li><a href="page-account.html">My Account</a></li>
-                                        <li><a href="page-login-register.html">login/register</a></li>
+                                        <li><a href="{% url 'signup' %}">login/register</a></li>
                                         <li><a href="page-purchase-guide.html">Purchase Guide</a></li>
                                         <li><a href="page-privacy-policy.html">Privacy Policy</a></li>
                                         <li><a href="page-terms.html">Terms of Service</a></li>
