@@ -76,3 +76,18 @@ def orderslist(request):
         'orders': orders,
     }
     return render(request, 'supuser/order_list.html', context)
+
+
+def change_status(request, order_id):
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        try:
+            order = Order.objects.get(id=order_id)
+            order.status = status
+            order.save()
+        except Order.DoesNotExist:
+            pass
+    
+    return redirect('orderslist')
+    
+    

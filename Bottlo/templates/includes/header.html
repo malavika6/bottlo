@@ -115,11 +115,12 @@
                     </div>
                     <div class="header-action-right">
                         <div class="header-action-2">
-                            <div class="header-action-icon-2">
-                                <a href="#">
-                                    <img class="svgInject" alt="Evara" src="{% static 'imgs/theme/icons/icon-account.png' %}">
-                                    
-                                </a>
+                            <div>
+                                {% if user %}
+                                    <li><i class="fi-rs-user"></i><a href="#">{{ user.first_name }}</a></li>
+                                {% else %}
+                                    <li><i class="fi-rs-user"></i><a href="{% url 'signup' %}">Log In / Sign Up</a></li>
+                                {% endif %}
                             </div>
                             <div class="header-action-icon-2">
                                 <a href="shop-wishlist.html">
@@ -132,14 +133,8 @@
                                     <img alt="Evara" src="{% static 'imgs/theme/icons/icon-cart.svg' %}">
                                     <span class="pro-count blue">2</span>
                                 </a>
-                                {% comment %}  {% endcomment %}
-                                <div>
-                                    {% if user %}
-                                        <li><i class="fi-rs-user"></i><a href="#">{{ user.first_name }}</a></li>
-                                    {% else %}
-                                        <li><i class="fi-rs-user"></i><a href="{% url 'signup' %}">Log In / Sign Up</a></li>
-                                    {% endif %}
-                                </div>
+                               
+                               
                                 
                             </div>
                         </div>

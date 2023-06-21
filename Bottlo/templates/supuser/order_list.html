@@ -43,9 +43,10 @@
                             <th>#ID</th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Total</th>
                             <th scope="col">Status</th>
                             <th scope="col">Date</th>
-                            <th scope="col" class="text-end"> Action </th>
+                            <th scope="col" > Action </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,20 +55,29 @@
                             <td>{{order.order_number}}</td>
                             <td><b>{{ order.first_name }} {{ order.last_name }}</b></td>
                             <td>{{order.email}}</td>
-                            
+                            <td>₹{{order.order_total}}</td>
                             <td><span class="badge rounded-pill alert-warning">{{order.status}}</span></td>
                             <td>{{order.created_at}}</td>
-                            <td class="text-end">
+                            <td>
                                 <a href="#" class="btn btn-md rounded font-sm">Detail</a>
                                 <div class="dropdown">
-                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
+                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz">Ch</i> </a>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">View detail</a>
-                                        <a class="dropdown-item" href="#">Edit info</a>
-                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                        <form method="POST" action="{% url 'change_status' order.id %}">
+                                            {% csrf_token %}
+                                            <select name="status" >
+                                                <option value="New" {% if order.status == 'New' %}selected{% endif %}>New</option>
+                                                <option value="Accepted" {% if order.status == 'Accepted' %}selected{% endif %}>Accepted</option>
+                                                <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Completed</option>
+                                                <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-md rounded font-sm">Change</button>
+                                        </form>
                                     </div>
-                                </div> <!-- dropdown //end -->
+                                </div>
+                                
                             </td>
+                            
                         </tr>
                         {% endfor %}
                     </tbody>

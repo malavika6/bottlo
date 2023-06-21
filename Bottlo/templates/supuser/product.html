@@ -46,7 +46,7 @@
                         <a href="#" class="img-wrap"> <img src="{{products.image.url}}" alt="Product"> </a>
                         <div class="info-wrap">
                             <a href="#" class="title text-truncate">{{products.product_name}}</a>
-                            <div class="price mb-2">${{products.price}} </div> <!-- price.// -->
+                            <div class="price mb-2">₹{{products.price}} </div> <!-- price.// -->
                             <a href="{% url 'edit_product' products.id %}" class="btn btn-sm font-sm rounded btn-brand">
                                 <i class="material-icons md-edit"></i> Edit
                             </a>

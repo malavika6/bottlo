@@ -21,7 +21,7 @@ def signup(request):
                 first_name=first_name, last_name=last_name, phone_number=phone_number, email=email, password=password)
             user.save()
             verify.send(phone_number)
-            messages.success(request, "Registration successfull")
+            # messages.success(request, "Registration successfull")
             return redirect('verify_code')
     context = {
         'form': form,
@@ -68,7 +68,7 @@ def login(request):
                 messages.error(request, "Invalid login credentials")
                 print("Invalid login credentials")
         else:
-            messages.error(request, "Email and password are required.")
+            # messages.error(request, "Email and password are required.")
             print("Email and password are required.")
     
     return render(request, "account/login.html")
