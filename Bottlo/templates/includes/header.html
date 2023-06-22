@@ -6,7 +6,7 @@
     <div class="mobile-header-wrapper-inner">
         <div class="mobile-header-top">
             <div class="mobile-header-logo">
-                <a href="index.html"><img src="{% static 'imgs/theme/logo.svg' %}" alt="logo"></a>
+                <a href="index.html"><img src="{% static 'imgs/theme/bottlo.png' %}" alt="logo"></a>
             </div>
             <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                 <button class="close-style search-close">
@@ -104,7 +104,7 @@
         <div class="container">
             <div class="header-wrap">
                 <div class="logo logo-width-1">
-                    <a href="index.html"><img src="{% static 'imgs\theme\bottlo1-removebg-preview.png' %}" alt="logo"></a>
+                    <a href="index.html"><img src="{% static 'imgs/theme/bottlo1-removebg-preview.png' %}" alt="logo"></a>
                 </div>
                 <div class="header-right">
                    <div class="search-style-2">
@@ -115,13 +115,7 @@
                     </div>
                     <div class="header-action-right">
                         <div class="header-action-2">
-                            <div>
-                                {% if user %}
-                                    <li><i class="fi-rs-user"></i><a href="#">{{ user.first_name }}</a></li>
-                                {% else %}
-                                    <li><i class="fi-rs-user"></i><a href="{% url 'signup' %}">Log In / Sign Up</a></li>
-                                {% endif %}
-                            </div>
+                            
                             <div class="header-action-icon-2">
                                 <a href="shop-wishlist.html">
                                     <img class="svgInject" alt="Evara" src="{% static 'imgs/theme/icons/icon-heart.svg' %}">
@@ -132,10 +126,15 @@
                                 <a class="mini-cart-icon" href="{% url 'cart' %}">
                                     <img alt="Evara" src="{% static 'imgs/theme/icons/icon-cart.svg' %}">
                                     <span class="pro-count blue">2</span>
-                                </a>
-                               
-                               
-                                
+                                </a>  
+                            </div>
+                            <div>
+                                {% if user %}
+                                    <li style="list-style: none; font-size: 25px;"><a href="#">{{ user.first_name }}</a></li>
+
+                                {% else %}
+                                    <li style="list-style: none;"><a href="{% url 'signup' %}">Log In / Sign Up</a></li>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -147,7 +146,7 @@
         <div class="container">
             <div class="header-wrap header-space-between position-relative">
                 <div class="logo logo-width-1 d-block d-lg-none">
-                    <a href="index.html"><img src="{% static 'imgs/theme/bottlo1-removebg-preview.png' %}" alt="logo"></a>
+                    <a href="index.html"><img src="{% static 'imgs/theme/bottlo.png' %}" alt="logo"></a>
                 </div>
                 <div class="header-nav d-none d-lg-flex">
                     <div class="main-categori-wrap d-none d-lg-block">
