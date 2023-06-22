@@ -59,22 +59,24 @@
                             <td><span class="badge rounded-pill alert-warning">{{order.status}}</span></td>
                             <td>{{order.created_at}}</td>
                             <td>
-                                <a href="#" class="btn btn-md rounded font-sm">Detail</a>
+                                <a href="#" class="btn btn-sm font-sm rounded btn-brand">Detail</a>
+                               
                                 <div class="dropdown">
-                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz">Ch</i> </a>
-                                    <div class="dropdown-menu">
-                                        <form method="POST" action="{% url 'change_status' order.id %}">
-                                            {% csrf_token %}
-                                            <select name="status" >
-                                                <option value="New" {% if order.status == 'New' %}selected{% endif %}>New</option>
-                                                <option value="Accepted" {% if order.status == 'Accepted' %}selected{% endif %}>Accepted</option>
-                                                <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Completed</option>
-                                                <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
-                                            </select>
-                                            <button type="submit" class="btn btn-md rounded font-sm">Change</button>
-                                        </form>
-                                    </div>
+                                    <button class="btn btn-sm font-sm btn-light rounded" type="button" id="statusDropdown{{ order.order_number }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Change
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="statusDropdown{{ order.order_number }}">
+                                        <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('statusForm{{ order.order_number }}').elements['status'].value = 'New'; document.getElementById('statusForm{{ order.order_number }}').submit();">New</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('statusForm{{ order.order_number }}').elements['status'].value = 'Accepted'; document.getElementById('statusForm{{ order.order_number }}').submit();">Accepted</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('statusForm{{ order.order_number }}').elements['status'].value = 'Completed'; document.getElementById('statusForm{{ order.order_number }}').submit();">Completed</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('statusForm{{ order.order_number }}').elements['status'].value = 'Cancelled'; document.getElementById('statusForm{{ order.order_number }}').submit();">Cancelled</a></li>
+                                    </ul>
+                                    <form id="statusForm{{ order.order_number }}" method="POST" action="{% url 'change_status' order.id %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="status" value="">
+                                    </form>
                                 </div>
+                                
                                 
                             </td>
                             
