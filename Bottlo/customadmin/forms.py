@@ -1,11 +1,10 @@
 from django import forms
 from store.models import Product
 
-
 class ProductEditForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ["product_name","slug", "description", "price",
+        fields = ["product_name", "slug", "description", "price",
                   "stock", "image", "is_available", "category"]
         widgets = {
             'product_name': forms.TextInput(attrs={'class': 'form-control mb-3'}),
@@ -17,3 +16,36 @@ class ProductEditForm(forms.ModelForm):
         }
 
     image = forms.ImageField(label='Product Image', required=False)
+
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image:
+            # Perform image validation
+            if image.size > 5 * 1024 * 1024:  # 5MB
+                raise forms.ValidationError('The image size should not exceed 5MB.')
+            if not image.content_type.startswith('image/'):
+                raise forms.ValidationError('Please upload a valid image file.')
+
+        return image
+
+    def clean(self):
+        cleaned_data = super().clean()
+        # Perform form field validations
+        product_name = cleaned_data.get('product_name')
+        slug = cleaned_data.get('slug')
+        price = cleaned_data.get('price')
+        stock = cleaned_data.get('stock')
+
+        if not product_name:
+            self.add_error('product_name', 'Product name is required.')
+
+        if not slug:
+            self.add_error('slug', 'Slug is required.')
+
+        if not price or price <= 0:
+            self.add_error('price', 'Price must be a positive number.')
+
+        if not stock or stock < 0:
+            self.add_error('stock', 'Stock must be a non-negative number.')
+
+        return cleaned_data

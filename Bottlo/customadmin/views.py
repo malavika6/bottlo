@@ -4,7 +4,8 @@ from store.models import Product
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import ProductEditForm
 from category.models import category
-from order.models import Order
+from order.models import Order,OrderProduct
+from cart.models import Cartitem
 
 
 
@@ -89,5 +90,29 @@ def change_status(request, order_id):
             pass
     
     return redirect('orderslist')
+
+def order_details(request,order_id):
+    
+    try:
+        subtotal = 0
+        ordr_product = OrderProduct.objects.filter(order__order_number=order_id)
+        order = Order.objects.get(order_number=order_id)
+        for i in ordr_product:
+            if i.product.price:
+                subtotal += i.product.price * i.quantity
+            else:
+                subtotal += i.product.price * i.quantity
+        context = {
+            'ordr_product': ordr_product,
+            'order': order,
+            'subtotal' : subtotal
+    }
+    except Order.DoesNotExist:
+        
+        context = {
+            'error_message': 'Order does not exist.'
+    } 
+
+    return render(request,'supuser/order_detail.html',context)
     
     

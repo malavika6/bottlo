@@ -5,6 +5,9 @@ from django.contrib import messages,auth
 from . import verify
 
 
+
+
+
 def signup(request):
 
     form = Registrationform()

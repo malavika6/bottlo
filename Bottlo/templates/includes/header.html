@@ -6,7 +6,7 @@
     <div class="mobile-header-wrapper-inner">
         <div class="mobile-header-top">
             <div class="mobile-header-logo">
-                <a href="{% url 'home' %}"><img src="{% static 'imgs/theme/bottlo.png' %}" alt="logo"></a>
+                <a href="{% url 'home' %}"><img src="{% static 'imgs/theme/bottlo1.png' %}" alt="logo"></a>
             </div>
             <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                 <button class="close-style search-close">
@@ -130,7 +130,7 @@
                             </div>
                             <div>
                                 {% if user %}
-                                    <li style="list-style: none; font-size: 25px;"><a href="#">{{ user.first_name }}</a></li>
+                                    <li style="list-style: none; font-size: 25px;"><a href="{% url 'profile' %}">{{ user.first_name }}</a></li>
 
                                 {% else %}
                                     <li style="list-style: none;"><a href="{% url 'signup' %}">Log In / Sign Up</a></li>
@@ -146,7 +146,7 @@
         <div class="container">
             <div class="header-wrap header-space-between position-relative">
                 <div class="logo logo-width-1 d-block d-lg-none">
-                    <a href="index.html"><img src="{% static 'imgs/theme/bottlo.png' %}" alt="logo"></a>
+                    <a href="{% url 'home' %}"><img src="{% static 'imgs/theme/bottlo1.png' %}" alt="logo"></a>
                 </div>
                 <div class="header-nav d-none d-lg-flex">
                     <div class="main-categori-wrap d-none d-lg-block">
