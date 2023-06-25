@@ -4,6 +4,14 @@ from . models import Account
 from django.contrib import messages,auth
 from . import verify
 
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import EmailMessage
+import requests
+
 
 
 
@@ -76,8 +84,31 @@ def login(request):
     return render(request, "account/login.html")
 
 
-
-
+def forgotpassword(request):
+    if request.method=="POST":
+        email=request.POST['email']
+        if Account.objects.filter(email=email).exists:
+            user =Account.objects.get(email__exact=email)
+            
+            
+            current_site = get_current_site(request)
+            mail_subject = 'Bottlo : Reset your password'  
+            message = render_to_string( 'accounts/reset_password.html', {
+                'user': user,
+                'domain' : current_site,
+                'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
+                'token' : default_token_generator.make_token(user),
+                })
+            to_email = email
+            print(to_email)
+            send_email = EmailMessage(mail_subject,message,to=[to_email])
+            send_email.send()
+            messages.success(request, 'Password reset email has been sent to your email address')
+            return redirect('login')
+        else:
+            messages.error(request,"Account Does't Exists!!!")
+            return redirect('forgotpassword')
+    return render(request,"account/forgotpassword.html")
 
 def logout(request):
     return render(request, "account/logout.html")
