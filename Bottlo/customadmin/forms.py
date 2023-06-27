@@ -49,9 +49,7 @@ class ProductEditForm(forms.ModelForm):
             if image.size > 5 * 1024 * 1024:  # 5MB
                 raise forms.ValidationError(
                     'The image size should not exceed 5MB.')
-            if not image.content_type.startswith('image/'):
-                raise forms.ValidationError(
-                    'Please upload a valid image file.')
+            
 
         return image
 
