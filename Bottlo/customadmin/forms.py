@@ -1,5 +1,30 @@
 from django import forms
 from store.models import Product
+from category.models import category
+
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = category
+        fields = ["category_name", "slug", "description", "cat_image"]
+        widgets = {
+            'category_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Type here'}),
+            'slug': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Type here'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Type here'}),
+        }
+    
+    cat_image = forms.ImageField(label='Product Image', required=False)
+    
+    def clean_cat_image(self):
+        cat_image = self.cleaned_data.get('cat_image')
+        
+        # Perform your custom validation logic here
+        if cat_image and cat_image.size > 10 * 1024 * 1024:  # Example: restrict image size to 10MB
+            raise forms.ValidationError("The image size should be less than 10MB.")
+        
+        return cat_image
+
 
 class ProductEditForm(forms.ModelForm):
     class Meta:
@@ -22,9 +47,11 @@ class ProductEditForm(forms.ModelForm):
         if image:
             # Perform image validation
             if image.size > 5 * 1024 * 1024:  # 5MB
-                raise forms.ValidationError('The image size should not exceed 5MB.')
+                raise forms.ValidationError(
+                    'The image size should not exceed 5MB.')
             if not image.content_type.startswith('image/'):
-                raise forms.ValidationError('Please upload a valid image file.')
+                raise forms.ValidationError(
+                    'Please upload a valid image file.')
 
         return image
 

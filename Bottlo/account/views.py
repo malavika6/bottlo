@@ -1,19 +1,17 @@
 from django.shortcuts import render, redirect
-from .forms import Registrationform,VerifyForm
+from django.http import HttpResponse
+from .forms import Registrationform, VerifyForm
 from . models import Account
-from django.contrib import messages,auth
+from django.contrib import messages, auth
 from . import verify
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 import requests
-
-
-
 
 
 def signup(request):
@@ -39,7 +37,6 @@ def signup(request):
     return render(request, "account/signup.html", context)
 
 
-
 def verify_code(request):
     if request.method == 'POST':
         form = VerifyForm(request.POST)
@@ -47,13 +44,13 @@ def verify_code(request):
             code = form.cleaned_data.get('code')
             if verify.check(request.user.phone_number, code):
                 request.user.is_verified = True
+                request.user.is_active = True
                 request.user.save()
                 auth.login(request, request.user)
                 return redirect('login')
     else:
         form = VerifyForm()
     return render(request, "account/verify.html", {'form': form})
-
 
 
 def login(request):
@@ -65,7 +62,7 @@ def login(request):
 
         if email and password:
             myuser = auth.authenticate(email=email, password=password)
-            print(email,password)
+            print(email, password)
 
             if myuser is not None:
                 auth.login(request, myuser)
@@ -80,35 +77,38 @@ def login(request):
         else:
             # messages.error(request, "Email and password are required.")
             print("Email and password are required.")
-    
+
     return render(request, "account/login.html")
 
 
 def forgotpassword(request):
-    if request.method=="POST":
-        email=request.POST['email']
-        if Account.objects.filter(email=email).exists:
-            user =Account.objects.get(email__exact=email)
-            
-            
+    if request.method == "POST":
+        email = request.POST['email']
+        if Account.objects.filter(email=email).exists():
+            user = Account.objects.get(email__exact=email)
+
             current_site = get_current_site(request)
-            mail_subject = 'Bottlo : Reset your password'  
-            message = render_to_string( 'accounts/reset_password.html', {
+            mail_subject = 'Bottlo : Reset your password'
+            message = render_to_string('account/reset_password.html', {
                 'user': user,
-                'domain' : current_site,
-                'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
-                'token' : default_token_generator.make_token(user),
-                })
+                'domain': current_site,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': default_token_generator.make_token(user),
+            })
             to_email = email
             print(to_email)
-            send_email = EmailMessage(mail_subject,message,to=[to_email])
+            send_email = EmailMessage(mail_subject, message, to=[to_email])
             send_email.send()
-            messages.success(request, 'Password reset email has been sent to your email address')
+            messages.success(
+                request, 'Password reset email has been sent to your email address')
             return redirect('login')
         else:
-            messages.error(request,"Account Does't Exists!!!")
+            messages.error(request, "Account Does't Exists!!!")
             return redirect('forgotpassword')
-    return render(request,"account/forgotpassword.html")
+    return render(request, 'account/forgotpassword.html')
+
+def reset_password(request):
+    return HttpResponse('ok')
 
 def logout(request):
     return render(request, "account/logout.html")
