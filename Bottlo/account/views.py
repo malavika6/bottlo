@@ -107,8 +107,45 @@ def forgotpassword(request):
             return redirect('forgotpassword')
     return render(request, 'account/forgotpassword.html')
 
-def reset_password(request):
-    return HttpResponse('ok')
+def reset_password(request,uidb64,token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = Account._default_manager.get(pk=uid)
+    except(TypeError, ValueError,OverflowError, Account.DoesNotExist):
+        user = None
+    
+    if user  is not None and default_token_generator.check_token(user, token):
+        request.session['uid']= uid
+        messages.success(request,'Please reset your password.!')
+        return redirect('resetpassword')
+    else:
+        messages.error(request, 'Sorry, the activation link has expired.!')
+        return redirect('login')
+
+
+def resetpassword(request):
+    
+    if request.method == 'POST':
+        password = request.POST['password']
+        confirm_password = request.POST['Confirm_password']
+        if password == confirm_password:
+            uid = request.session.get('uid')
+            user = Account.objects.get(pk=uid)
+            user.set_password(password)
+            user.save()
+            messages.success(request,"sucessfully reset password")
+            return redirect('login')
+
+        else:
+            messages.error(request,"Passwords are not match")
+            return redirect('resetpassword')
+    else:
+     return render(request,'account/resetpassword.html')
+      
 
 def logout(request):
-    return render(request, "account/logout.html")
+     if 'email' in request.session:
+         request.session.flush
+     auth.logout(request)
+     messages.success(request,"logout sucessfully")
+     return redirect("signin")
