@@ -2,13 +2,16 @@ from django.shortcuts import render,redirect
 from store.models import Product
 from category.models import category
 from order.models import Order
+from django.core.paginator import EmptyPage,PageNotAnInteger,Paginator
 
 
 def home(request):
     products = Product.objects.all().filter(is_available=True)
-
+    paginator = Paginator(products, 8)
+    page = request.GET.get('page')
+    paged_products = paginator.get_page(page)
     context = {
-        "product": products,}
+        "product":paged_products,}
     return render(request, 'home.html', context)
 
 def custom_404(request, exception):

@@ -4,6 +4,7 @@ from .forms import Registrationform, VerifyForm
 from . models import Account
 from django.contrib import messages, auth
 from . import verify
+from django.contrib.auth.decorators import login_required
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -28,6 +29,7 @@ def signup(request):
             user = Account.objects.create_user(
                 first_name=first_name, last_name=last_name, phone_number=phone_number, email=email, password=password)
             user.save()
+            request.session['email']=email
             verify.send(phone_number)
             # messages.success(request, "Registration successfull")
             return redirect('verify_code')
@@ -81,6 +83,7 @@ def login(request):
     return render(request, "account/login.html")
 
 
+@login_required(login_url='login')
 def forgotpassword(request):
     if request.method == "POST":
         email = request.POST['email']
@@ -107,6 +110,7 @@ def forgotpassword(request):
             return redirect('forgotpassword')
     return render(request, 'account/forgotpassword.html')
 
+@login_required(login_url='login')
 def reset_password(request,uidb64,token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
@@ -122,7 +126,7 @@ def reset_password(request,uidb64,token):
         messages.error(request, 'Sorry, the activation link has expired.!')
         return redirect('login')
 
-
+@login_required(login_url='login')
 def resetpassword(request):
     
     if request.method == 'POST':
@@ -142,10 +146,10 @@ def resetpassword(request):
     else:
      return render(request,'account/resetpassword.html')
       
-
+@login_required(login_url='login')
 def logout(request):
-     if 'email' in request.session:
+    if 'email' in request.session:
          request.session.flush
-     auth.logout(request)
-     messages.success(request,"logout sucessfully")
-     return redirect("signin")
+    auth.logout(request)
+    messages.success(request,"logout sucessfully")
+    return redirect("login")
