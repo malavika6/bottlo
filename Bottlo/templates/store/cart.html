@@ -18,6 +18,7 @@
                     </div>
                 
                 {% else%}
+                 
                     <div class="table-responsive">
                         <table class="table shopping-summery text-center clean">
                             <thead>
@@ -44,8 +45,13 @@
                                         <div class="detail-qty border radius m-auto">
                                             <a href="{% url 'remove_cart' cart_item.product.id %}" class="qty-down" data-remove-url=""><i class="fi-rs-angle-small-down"></i></a>
                                             <span class="qty-val">{{ cart_item.quantity }}</span>
-                                            <a href="{% url 'add_cart' cart_item.product.id %}" class="qty-up" data-add-url=""><i class="fi-rs-angle-small-up"></i></a>
+                                            {% if cart_item.quantity != cart_item.product.stock %}
+                                                <a href="{% url 'add_cart' cart_item.product.id %}" class="qty-up" data-add-url=""><i class="fi-rs-angle-small-up"></i></a>
+                                            {% else %}
+                                                <a href="#" class="qty-up disabled"><i class="fi-rs-angle-small-up"></i></a>
+                                            {% endif %}
                                         </div>
+                                        
                                     </td>
                                     <td class="text-right" data-title="Cart">
                                         <span>₹{{ cart_item.sub_total}} </span>
@@ -59,10 +65,7 @@
                         </table>
                     </div>
                    
-                <div class="cart-action text-end ">
-                    
-                    <a href="{% url 'store' %}" class="btn "><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
-                </div>
+                
                 <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
                 <div class="row mb-50">
                     <div class="col-lg-6 col-md-12">
@@ -383,7 +386,8 @@
                                     </tbody>
                                 </table>
                             </div>
-                            
+                    
+                            <a href="{% url 'store' %}" class="btn "><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
                             <a href="{% url 'checkout'%}" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Proceed To CheckOut</a>
                         </div>
                     </div>

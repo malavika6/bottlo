@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block content%}
+
 <section class="mt-50 mb-50">
     <div class="container">
         <div class="row">
@@ -17,7 +18,7 @@
                                     <figure class="border-radius-10">
                                         <img src="{{single_product.image.url}}" alt="product image">
                                     </figure>
-                                    <figure class="border-radius-10">
+                                    {% comment %} <figure class="border-radius-10">
                                         <img src="{{single_product.image.url}}" alt="product image">
                                     </figure>
                                     <figure class="border-radius-10">
@@ -34,7 +35,7 @@
                                     </figure>
                                     <figure class="border-radius-10">
                                         <img src="{{single_product.image.url}}" alt="product image">
-                                    </figure>
+                                    </figure> {% endcomment %}
                                 </div>
                             </div>
                             <!-- End Gallery -->
