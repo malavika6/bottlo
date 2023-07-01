@@ -4,6 +4,43 @@
 
 {% block content%}
 
+<style>
+    .detail-qty {
+        max-width: 100px;
+        padding: 5px 10px;
+        position: relative;
+        width: 100%;
+        border-radius: 20px;
+        
+      }
+      
+       .detail-qty > a {
+      
+      } 
+      
+      .detail-qty > a:hover {
+        color: #088178;
+      }
+      
+      .detail-qty > a.qty-up {
+        font-size: 11px;
+        color: #707070;
+        position: absolute;
+        right: 15px;
+        top: 6px;
+      }
+      
+      .detail-qty > a.qty-down {
+        font-size: 11px;
+        color: #707070;
+        position: absolute;
+        right:75px;
+        top: 8px;
+        bottom: 0;
+      }
+    
+</style>
+
 <section class="mt-50 mb-50">
     <div class="container">
         <div class="row">
@@ -41,17 +78,20 @@
                                         </p>
                                     </td>
                                     <td class="price" data-title="Price"><span>₹{{ cart_item.product.price}} </span></td>
+                                    {% comment %} <td class="text-center" data-title="Stock">
+                                        <div class="detail-qty border radius m-auto">
+                                            <a href="{% url 'remove_cart' cart_item.product.id %}" class="qty-down" data-remove-url="qty-down"><i class="fi-rs-angle-small-down"></i></a>
+                                            <span class="qty-val">{{ cart_item.quantity}}</span>
+                                            <a href="{% url 'add_cart' cart_item.product.id %}"  class="qty-up" data-add-url="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                        </div>
+                                       
+                                    </td> {% endcomment %}
                                     <td class="text-center" data-title="Stock">
                                         <div class="detail-qty border radius m-auto">
-                                            <a href="{% url 'remove_cart' cart_item.product.id %}" class="qty-down" data-remove-url=""><i class="fi-rs-angle-small-down"></i></a>
-                                            <span class="qty-val">{{ cart_item.quantity }}</span>
-                                            {% if cart_item.quantity != cart_item.product.stock %}
-                                                <a href="{% url 'add_cart' cart_item.product.id %}" class="qty-up" data-add-url=""><i class="fi-rs-angle-small-up"></i></a>
-                                            {% else %}
-                                                <a href="#" class="qty-up disabled"><i class="fi-rs-angle-small-up"></i></a>
-                                            {% endif %}
+                                            <a href="" class="qty-down" data-remove-url="qty-down"><i class="fi-rs-minus"></i></a>
+                                            <span class="qty-val">{{ cart_item.quantity}}</span>
+                                            <a href=""  class="qty-up" data-add-url="qty-up"><i class="fi-rs-plus"></i></a>
                                         </div>
-                                        
                                     </td>
                                     <td class="text-right" data-title="Cart">
                                         <span>₹{{ cart_item.sub_total}} </span>
@@ -77,7 +117,7 @@
                             <div class="form-row">
                                 <div class="form-group col-lg-12">
                                     <div class="custom_select">
-                                        <select class="form-control select-active">
+                                        {% comment %} <select class="form-control select-active">
                                             <option value="">Choose a option...</option>
                                             <option value="AX">Aland Islands</option>
                                             <option value="AF">Afghanistan</option>
@@ -323,7 +363,7 @@
                                             <option value="YE">Yemen</option>
                                             <option value="ZM">Zambia</option>
                                             <option value="ZW">Zimbabwe</option>
-                                        </select>
+                                        </select> {% endcomment %}
                                     </div>
                                 </div>
                             </div>

@@ -474,6 +474,7 @@ h4 {
   transition: all .3s ease 0s;
 }
 
+
 @-webkit-keyframes slideleft {
   10% {
     opacity: 0;
@@ -796,6 +797,7 @@ h5.widget-title {
   transition: transform .5s, -webkit-transform .5s;
   transition: transform .5s,-webkit-transform .5s;
 }
+
 
 .text-style-1:hover::after {
   height: 30%;
@@ -4374,7 +4376,7 @@ table .product-thumbnail img {
   border-color: #088178;
 }
 
-.detail-qty {
+/* .detail-qty {
   max-width: 80px;
   padding: 9px 20px;
   position: relative;
@@ -4382,24 +4384,30 @@ table .product-thumbnail img {
   border-radius: 4px;
 }
 
-.detail-qty > a {
+/* .detail-qty > a {
   font-size: 16px;
   position: absolute;
   right: 8px;
   color: #707070;
-}
+} */
 
 .detail-qty > a:hover {
   color: #088178;
 }
 
 .detail-qty > a.qty-up {
+  position: absolute;
+  right: 0px;
+  top: 10px;
   top: 0;
 }
 
 .detail-qty > a.qty-down {
+  position: absolute;
+  left: 0px;
+  top: 10px;
   bottom: 0;
-}
+} */
 
 .attr-detail .select-box select {
   height: 40px;
