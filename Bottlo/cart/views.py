@@ -15,54 +15,67 @@ def _cart_id(request):
 
 
 def add_cart(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
     current_user = request.user
-
-    # Check if the user is authenticated
-    # if current_user.is_authenticated:
-    try:
-        cart = Cart.objects.get(cart_id=_cart_id(request))
-        print(cart,"hi")
-    except Cart.DoesNotExist:
-        cart = Cart.objects.create(cart_id=_cart_id(request))
-        cart.save()
-
-    try:
-        cart_item = Cartitem.objects.get(
-            product=product, cart=cart, user=current_user)
-        cart_item.quantity += 1
-        cart_item.save()
-        print("hello", cart_item)
-    except Cartitem.DoesNotExist:
-        cart_item = Cartitem.objects.create(
-            product=product,
-            quantity=1,
-            cart=cart,
-            user=current_user
-        )
-        print("hello")
-        cart_item.save()
-
-    return redirect('cart')
-
-
-def remove_cart(request, product_id):
-    cart = Cart.objects.get(cart_id=_cart_id(request))
-    product = get_object_or_404(Product, id=product_id)
-    cart_item = Cartitem.objects.get(product=product, cart=cart)
-    if cart_item.quantity > 1:
-        cart_item.quantity -= 1
-        cart_item.save()
+    product = Product.objects.get(id=product_id)
+    
+    if current_user.is_authenticated:
+        is_cart_item_exists = Cartitem.objects.filter(product=product, user=current_user).exists()
+        
+        if is_cart_item_exists:
+            cart_item = Cartitem.objects.get(product=product, user=current_user)
+            cart_item.quantity += 1
+            cart_item.save()
+        else:
+            cart_item = Cartitem.objects.create(product=product, quantity=1, user=current_user)
+        
+        return redirect('cart')
+    
     else:
-        cart_item.delete()
+        try:
+            cart = Cart.objects.get(cart_id=_cart_id(request))
+        except Cart.DoesNotExist:
+            cart = Cart.objects.create(cart_id=_cart_id(request))
+
+        is_cart_item_exists = Cartitem.objects.filter(product=product, cart=cart).exists()
+
+        if is_cart_item_exists:
+            cart_item = Cartitem.objects.get(product=product, cart=cart)
+            cart_item.quantity += 1
+            cart_item.save()
+        else:
+            cart_item = Cartitem.objects.create(product=product, quantity=1, cart=cart)
+
+        return redirect('cart')
+
+
+
+def remove_cart(request,product_id):
+    
+    product = get_object_or_404(Product,id=product_id)
+    try:
+        if request.user.is_authenticated:
+            cart_item = Cartitem.objects.get(product=product,user=request.user)
+        else:
+            cart = Cart.objects.get(cart_id=_cart_id(request))
+            cart_item = Cartitem.objects.get(product=product,cart=cart)
+        if cart_item.quantity > 1:
+            cart_item.quantity -= 1
+            cart_item.save()
+        else:
+            cart_item.delete()
+    except:
+        pass
     return redirect('cart')
 
 
-def del_cart(request, product_id):
-    cart = Cart.objects.get(cart_id=_cart_id(request))
-    print(cart,"no")
-    product = get_object_or_404(Product, id=product_id)
-    cart_item = Cartitem.objects.get(product=product, cart=cart)
+def del_cart(request,product_id):
+    
+    product = get_object_or_404(Product,id=product_id)
+    if request.user.is_authenticated:
+        cart_item = Cartitem.objects.get(product=product,user=request.user)
+    else:
+        cart1 = Cart.objects.get(cart_id = _cart_id(request))
+        cart_item = Cartitem.objects.get(product=product,cart=cart1)
     cart_item.delete()
     return redirect('cart')
 

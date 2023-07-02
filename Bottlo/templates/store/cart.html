@@ -88,15 +88,17 @@
                                     </td> {% endcomment %}
                                     <td class="text-center" data-title="Stock">
                                         <div class="detail-qty border radius m-auto">
-                                            <a href="" class="qty-down" data-remove-url="qty-down"><i class="fi-rs-minus"></i></a>
-                                            <span class="qty-val">{{ cart_item.quantity}}</span>
-                                            <a href=""  class="qty-up" data-add-url="qty-up"><i class="fi-rs-plus"></i></a>
+                                            <a href="{% url 'remove_cart' cart_item.product.id %}?decrement" class="qty-down"><i class="fi-rs-minus"></i></a>
+                                            <span class="qty-val">{{cart_item.quantity}}</span>
+                                            <a href="{% url 'add_cart' cart_item.product.id %}?increment" class="qty-up"><i class="fi-rs-plus"></i></a>
                                         </div>
                                     </td>
                                     <td class="text-right" data-title="Cart">
                                         <span>₹{{ cart_item.sub_total}} </span>
                                     </td>
-                                    <td class="action" data-title="Remove"><a href="{% url 'del_cart' cart_item.product.id %}" class="text-muted"><i class="fi-rs-trash"></i></a></td>
+                                    
+                                    <td class="action" data-title="Remove"><a href="{% url 'del_cart' cart_item.product.id %}" class="text-muted"><i class="fi-rs-trash"></i></a>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             

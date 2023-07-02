@@ -7048,8 +7048,8 @@ span.fi-rs-apps {
   background: #ffffff;
 }
 
-.main-menu.hover-boder.hover-boder-modify > nav > ul > li > a::after {
-  bottom: 28px;
+.main-menu.main-menu-padding-1 > nav > ul > li {
+  padding: 0 35px !important;
 }
 
 .main-menu.main-menu-light-white > nav > ul > li > a {
