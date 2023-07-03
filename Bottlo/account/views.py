@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import Registrationform, VerifyForm
+from .forms import RegistrationForm, VerifyForm
 from . models import Account
 from django.contrib import messages, auth
 from . import verify
 from django.contrib.auth.decorators import login_required
+from cart.models import Cart, Cartitem
+from cart.views import _cart_id
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -17,9 +19,9 @@ import requests
 
 def signup(request):
 
-    form = Registrationform()
+    form = RegistrationForm()
     if request.method == 'POST':
-        form = Registrationform(request.POST)
+        form = RegistrationForm(request.POST)
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
@@ -29,7 +31,7 @@ def signup(request):
             user = Account.objects.create_user(
                 first_name=first_name, last_name=last_name, phone_number=phone_number, email=email, password=password)
             user.save()
-            request.session['email']=email
+            request.session['email'] = email
             verify.send(phone_number)
             # messages.success(request, "Registration successfull")
             return redirect('verify_code')
@@ -58,15 +60,25 @@ def verify_code(request):
 def login(request):
     if request.method == "POST":
         email = request.POST.get('email')
-        print(email)
         password = request.POST.get('password')
-        print(password)
 
         if email and password:
             myuser = auth.authenticate(email=email, password=password)
-            print(email, password)
 
             if myuser is not None:
+
+                try:
+                    cart = Cart.objects.get(cart_id=_cart_id(request))
+                    is_cart_item_exists = Cartitem.objects.filter(
+                        cart=cart).exists()
+                    if is_cart_item_exists:
+                        cart_items = Cartitem.objects.filter(cart=cart)
+                        for item in cart_items:
+                            item.user = myuser
+                            item.save()
+                except:
+                    pass
+
                 auth.login(request, myuser)
 
                 if request.user.is_superadmin:
@@ -110,25 +122,27 @@ def forgotpassword(request):
             return redirect('forgotpassword')
     return render(request, 'account/forgotpassword.html')
 
+
 @login_required(login_url='login')
-def reset_password(request,uidb64,token):
+def reset_password(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
         user = Account._default_manager.get(pk=uid)
-    except(TypeError, ValueError,OverflowError, Account.DoesNotExist):
+    except (TypeError, ValueError, OverflowError, Account.DoesNotExist):
         user = None
-    
-    if user  is not None and default_token_generator.check_token(user, token):
-        request.session['uid']= uid
-        messages.success(request,'Please reset your password.!')
+
+    if user is not None and default_token_generator.check_token(user, token):
+        request.session['uid'] = uid
+        messages.success(request, 'Please reset your password.!')
         return redirect('resetpassword')
     else:
         messages.error(request, 'Sorry, the activation link has expired.!')
         return redirect('login')
 
+
 @login_required(login_url='login')
 def resetpassword(request):
-    
+
     if request.method == 'POST':
         password = request.POST['password']
         confirm_password = request.POST['Confirm_password']
@@ -137,19 +151,20 @@ def resetpassword(request):
             user = Account.objects.get(pk=uid)
             user.set_password(password)
             user.save()
-            messages.success(request,"sucessfully reset password")
+            messages.success(request, "sucessfully reset password")
             return redirect('login')
 
         else:
-            messages.error(request,"Passwords are not match")
+            messages.error(request, "Passwords are not match")
             return redirect('resetpassword')
     else:
-     return render(request,'account/resetpassword.html')
-      
+        return render(request, 'account/resetpassword.html')
+
+
 @login_required(login_url='login')
 def logout(request):
     if 'email' in request.session:
-         request.session.flush
+        request.session.flush
     auth.logout(request)
-    messages.success(request,"logout sucessfully")
+    messages.success(request, "logout sucessfully")
     return redirect("login")

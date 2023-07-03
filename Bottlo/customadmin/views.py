@@ -6,6 +6,7 @@ from .forms import ProductEditForm, CategoryForm
 from category.models import category
 from order.models import Order, OrderProduct
 from account.models import Account
+from PIL import Image
 
 
 def supuser(request):
