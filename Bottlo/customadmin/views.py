@@ -4,13 +4,21 @@ from store.models import Product
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import ProductEditForm, CategoryForm
 from category.models import category
-from order.models import Order, OrderProduct
+from order.models import Order, OrderProduct,Payment
 from account.models import Account
 from PIL import Image
 
 
 def supuser(request):
-    return render(request, "supuser/adminhome.html")
+    orders = Order.objects.all().order_by('-created_at')
+    orderpayment=Payment.objects.all()
+
+    context = {
+        'orders': orders,
+        'orderpayment':orderpayment
+    }
+    return render(request, 'supuser/adminhome.html', context)
+  
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -149,9 +157,11 @@ def del_category(request, id):
 
 def orderslist(request):
     orders = Order.objects.all().order_by('-created_at')
+   
 
     context = {
         'orders': orders,
+        
     }
     return render(request, 'supuser/order_list.html', context)
 
@@ -170,12 +180,11 @@ def change_status(request, order_id):
 
 
 def order_details(request, order_id):
-
     try:
         subtotal = 0
-        ordr_product = OrderProduct.objects.filter(
-            order__order_number=order_id)
-        order = Order.objects.get(order_number=order_id)
+        ordr_product = OrderProduct.objects.filter(order__order_number=order_id)
+        order, created = Order.objects.get_or_create(id=order_id)
+        payment=Payment.objects.filter(order=order)
         for i in ordr_product:
             if i.product.price:
                 subtotal += i.product.price * i.quantity
@@ -184,12 +193,14 @@ def order_details(request, order_id):
         context = {
             'ordr_product': ordr_product,
             'order': order,
-            'subtotal': subtotal
+            'payment':payment,
+            'subtotal' : subtotal,
         }
     except Order.DoesNotExist:
-
+        # Handle the case when the order does not exist
         context = {
-            'error_message': 'Order does not exist.'
+            'error_message ': 'Order does not exist.'
         }
+
 
     return render(request, 'supuser/order_detail.html', context)

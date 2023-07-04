@@ -19,10 +19,6 @@ class CategoryForm(forms.ModelForm):
     def clean_cat_image(self):
         cat_image = self.cleaned_data.get('cat_image')
         
-        # Perform your custom validation logic here
-        if cat_image and cat_image.size > 10 * 1024 * 1024:  # Example: restrict image size to 10MB
-            raise forms.ValidationError("The image size should be less than 10MB.")
-        
         return cat_image
 
 
@@ -44,11 +40,6 @@ class ProductEditForm(forms.ModelForm):
 
     def clean_image(self):
         image = self.cleaned_data.get('image')
-        if image:
-            # Perform image validation
-            if image.size > 5 * 1024 * 1024:  # 5MB
-                raise forms.ValidationError(
-                    'The image size should not exceed 5MB.')
             
 
         return image

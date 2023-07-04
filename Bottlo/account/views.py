@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import RegistrationForm, VerifyForm
+from .forms import Registrationform, VerifyForm
 from . models import Account
 from django.contrib import messages, auth
 from . import verify
@@ -19,9 +19,9 @@ import requests
 
 def signup(request):
 
-    form = RegistrationForm()
+    form = Registrationform()
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
+        form = Registrationform(request.POST)
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
@@ -95,15 +95,15 @@ def login(request):
     return render(request, "account/login.html")
 
 
-@login_required(login_url='login')
 def forgotpassword(request):
+    print("hiiiiiii")
     if request.method == "POST":
         email = request.POST['email']
         if Account.objects.filter(email=email).exists():
             user = Account.objects.get(email__exact=email)
 
             current_site = get_current_site(request)
-            mail_subject = 'Bottlo : Reset your password'
+            mail_subject = 'ghostcart : Reset your password'
             message = render_to_string('account/reset_password.html', {
                 'user': user,
                 'domain': current_site,
@@ -123,7 +123,6 @@ def forgotpassword(request):
     return render(request, 'account/forgotpassword.html')
 
 
-@login_required(login_url='login')
 def reset_password(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
@@ -140,7 +139,6 @@ def reset_password(request, uidb64, token):
         return redirect('login')
 
 
-@login_required(login_url='login')
 def resetpassword(request):
 
     if request.method == 'POST':
