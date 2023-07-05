@@ -25,3 +25,8 @@ class Cartitem(models.Model):
 
     def __unicode__(self):
         return self.product
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    date_added=models.DateField(auto_now_add=True)

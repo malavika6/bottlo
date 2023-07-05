@@ -96,7 +96,7 @@
                                         {% else %}
                                             <button type="submit" class="button button-add-to-cart" onclick="window.location.href='{% url 'add_cart' single_product.id %}'">Add to cart</button>
                                          {% endif %}
-                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="{% url 'add_wishlist' single_product.id %}"><i class="fi-rs-heart"></i></a>
                                             <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
                                     </div> 
                                     

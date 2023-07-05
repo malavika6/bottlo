@@ -1,10 +1,45 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from store.models import Product
-from .models import Cart, Cartitem
-from django.http import HttpResponse
+from .models import Cart, Cartitem, Wishlist
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from decimal import Decimal
+from django.contrib import messages
+from django.urls import reverse
+
+
+def cart(request):
+    total = 0
+    quantity = 0
+    cart_items = None
+    tax = 0
+    grand_total = 0
+
+    try:
+        if request.user.is_authenticated:
+            cart_items = Cartitem.objects.filter(
+                user=request.user, is_active=True)
+        else:
+            cart = Cart.objects.get(cart_id=_cart_id(request))
+            cart_items = Cartitem.objects.filter(cart=cart, is_active=True)
+        for cart_item in cart_items:
+            total += (cart_item.product.price * cart_item.quantity)
+            quantity += cart_item.quantity
+        tax = (2 * total) / 100
+        grand_total = total + tax
+    except ObjectDoesNotExist:
+        pass
+
+    context = {
+        'total': total,
+        'quantity': quantity,
+        'cart_items': cart_items,
+        'tax': tax,
+        'grand_total': grand_total
+    }
+
+    return render(request, 'store/cart.html', context)
 
 
 def _cart_id(request):
@@ -85,39 +120,6 @@ def del_cart(request, product_id):
     return redirect('cart')
 
 
-def cart(request):
-    total = 0
-    quantity = 0
-    cart_items = None
-    tax = 0
-    grand_total = 0
-
-    try:
-        if request.user.is_authenticated:
-            cart_items = Cartitem.objects.filter(
-                user=request.user, is_active=True)
-        else:
-            cart = Cart.objects.get(cart_id=_cart_id(request))
-            cart_items = Cartitem.objects.filter(cart=cart, is_active=True)
-        for cart_item in cart_items:
-            total += (cart_item.product.price * cart_item.quantity)
-            quantity += cart_item.quantity
-        tax = (2 * total) / 100
-        grand_total = total + tax
-    except ObjectDoesNotExist:
-        pass
-
-    context = {
-        'total': total,
-        'quantity': quantity,
-        'cart_items': cart_items,
-        'tax': tax,
-        'grand_total': grand_total
-    }
-
-    return render(request, 'store/cart.html', context)
-
-
 @login_required(login_url='login')
 def checkout(request):
     total = 0
@@ -150,3 +152,37 @@ def checkout(request):
     }
 
     return render(request, 'store/checkout.html', context)
+
+@login_required(login_url='login')
+def wishlist(request):
+
+    wishlist_items = Wishlist.objects.filter(user=request.user)
+    context = {
+        'wishlist_items': wishlist_items
+    }
+    return render(request, 'store/wishlist.html', context)
+
+@login_required(login_url='login')
+def add_wishlist(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    created = Wishlist.objects.get_or_create(product=product, user=request.user)
+    if created:
+        messages.success(request, 'Product added successfully')
+    else:
+        messages.info(request, 'Product already in wishlist.')
+
+    redirect_url = request.META.get('HTTP_REFERER')
+    if not redirect_url:
+        # Fallback URL if HTTP Referer header is not available
+        redirect_url = reverse('wishlist')
+
+    redirect_url += f'?product_id={product_id}'
+
+    return redirect(redirect_url)
+
+@login_required(login_url='login')
+def del_wishlist(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    Wishlist.objects.filter(product=product, user=request.user).delete()
+    messages.success(request, 'product removed successfully')
+    return redirect('wishlist')
