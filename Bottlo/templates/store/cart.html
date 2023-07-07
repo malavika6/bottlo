@@ -22,7 +22,7 @@
         color: #088178;
       }
       
-      .detail-qty > a.qty-up {
+      .detail-qty > a.qty-upp {
         font-size: 11px;
         color: #707070;
         position: absolute;
@@ -30,7 +30,7 @@
         top: 6px;
       }
       
-      .detail-qty > a.qty-down {
+      .detail-qty > a.qty-downn {
         font-size: 11px;
         color: #707070;
         position: absolute;
@@ -78,19 +78,14 @@
                                         </p>
                                     </td>
                                     <td class="price" data-title="Price"><span>₹{{ cart_item.product.price}} </span></td>
-                                    {% comment %} <td class="text-center" data-title="Stock">
-                                        <div class="detail-qty border radius m-auto">
-                                            <a href="{% url 'remove_cart' cart_item.product.id %}" class="qty-down" data-remove-url="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                            <span class="qty-val">{{ cart_item.quantity}}</span>
-                                            <a href="{% url 'add_cart' cart_item.product.id %}"  class="qty-up" data-add-url="qty-up"><i class="fi-rs-angle-small-up"></i></a>
-                                        </div>
-                                       
-                                    </td> {% endcomment %}
                                     <td class="text-center" data-title="Stock">
                                         <div class="detail-qty border radius m-auto">
-                                            <a href="{% url 'remove_cart' cart_item.product.id %}?decrement" class="qty-down"><i class="fi-rs-minus"></i></a>
-                                            <span class="qty-val">{{cart_item.quantity}}</span>
-                                            <a href="{% url 'add_cart' cart_item.product.id %}?increment" class="qty-up"><i class="fi-rs-plus"></i></a>
+                                            
+                                                <a href="{% url 'remove_cart' cart_item.product.id %}?action=decrement" class="qty-downn"><i class="fi-rs-angle-small-down"></i></a>
+                                                <span class="qty-val">{{ cart_item.quantity }}</span>
+                                                <a href="{% url 'add_cart' cart_item.product.id %}?action=increment" class="qty-upp"><i class="fi-rs-angle-small-up"></i></a>
+                                        
+                                            
                                         </div>
                                     </td>
                                     <td class="text-right" data-title="Cart">

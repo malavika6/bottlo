@@ -50,6 +50,9 @@ def _cart_id(request):
 
 
 def add_cart(request, product_id):
+    # Retrieve the 'action' parameter from the query string
+    action = request.GET.get('action')
+
     current_user = request.user
     product = Product.objects.get(id=product_id)
 
@@ -60,14 +63,16 @@ def add_cart(request, product_id):
         if is_cart_item_exists:
             cart_item = Cartitem.objects.get(
                 product=product, user=current_user)
-            cart_item.quantity += 1
+            if action == 'increment':
+                cart_item.quantity += 1
+            elif action == 'decrement' and cart_item.quantity > 1:
+                cart_item.quantity -= 1
             cart_item.save()
         else:
             cart_item = Cartitem.objects.create(
                 product=product, quantity=1, user=current_user)
 
         return redirect('cart')
-
     else:
         try:
             cart = Cart.objects.get(cart_id=_cart_id(request))
@@ -89,6 +94,9 @@ def add_cart(request, product_id):
 
 
 def remove_cart(request, product_id):
+    # Retrieve the 'action' parameter from the query string
+    print('helloooooo')
+    action = request.GET.get('action')
 
     product = get_object_or_404(Product, id=product_id)
     try:
@@ -98,7 +106,7 @@ def remove_cart(request, product_id):
         else:
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_item = Cartitem.objects.get(product=product, cart=cart)
-        if cart_item.quantity > 1:
+        if action == 'decrement' and cart_item.quantity > 1:
             cart_item.quantity -= 1
             cart_item.save()
         else:
@@ -106,6 +114,7 @@ def remove_cart(request, product_id):
     except:
         pass
     return redirect('cart')
+
 
 
 def del_cart(request, product_id):
