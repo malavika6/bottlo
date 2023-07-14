@@ -169,3 +169,6 @@ def logout(request):
     auth.logout(request)
     messages.success(request, "logout sucessfully")
     return redirect("login")
+
+
+

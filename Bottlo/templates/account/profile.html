@@ -27,9 +27,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Order list</a>
                                     </li>
-                                    <li class="nav-item">
+                                    {% comment %} <li class="nav-item">
                                         <a class="nav-link" id="track-orders-tab" data-bs-toggle="tab" href="#track-orders" role="tab" aria-controls="track-orders" aria-selected="false"><i class="fi-rs-shopping-cart-check mr-10"></i>Track Your Order</a>
-                                    </li>
+                                    </li> {% endcomment %}
                                     <li class="nav-item">
                                         <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
                                     </li>
@@ -66,6 +66,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Order</th>
+                                                            <th></th>
                                                             <th>Date</th>
                                                             <th>Status</th>
                                                             <th>Total</th>
@@ -76,6 +77,7 @@
                                                         {% for order in orders %}
                                                         <tr>
                                                             <td>{{ order.order_number }}</td>
+                                                            <td></td>
                                                             <td>{{ order.created_at }}</td>
                                                             <td>{{ order.status }}</td>
                                                             <td>₹{{ order.order_total }}</td>
@@ -97,7 +99,7 @@
                                     </div>
                                     {% endif %}
                                 </div>
-                                <div class="tab-pane fade" id="track-orders" role="tabpanel" aria-labelledby="track-orders-tab">
+                                {% comment %} <div class="tab-pane fade" id="track-orders" role="tabpanel" aria-labelledby="track-orders-tab">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5 class="mb-0">Orders tracking</h5>
@@ -121,22 +123,28 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> {% endcomment %}
                                 <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+                                    {% if not addresses %}
+                                        <a href="#" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Add New Address</a>
+                                    {% else %}
                                     <div class="row">
+                                        
                                         <div class="col-lg-6">
                                             <div class="card mb-3 mb-lg-0">
                                                 <div class="card-header">
                                                     <h5 class="mb-0">Billing Address</h5>
                                                 </div>
                                                 <div class="card-body">
-                                                    <address>3522 Interstate<br> 75 Business Spur,<br> Sault Ste. <br>Marie, MI 49783</address>
-                                                    <p>New York</p>
+                                                    <address>{{addresses.first_name}}{{addresses.last_name}}<br>{{addresses.addressline}},<br> {{addresses.city}}. <br>{{addresses.state}},{{addresses.country}} <br>{{addresses.pincode}}</address>
                                                     <a href="#" class="btn-small">Edit</a>
+                                                    
                                                 </div>
                                             </div>
+                                            <a href="#" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Add New Address</a>
                                         </div>
-                                        <div class="col-lg-6">
+                                        
+                                        {% comment %} <div class="col-lg-6">
                                             <div class="card">
                                                 <div class="card-header">
                                                     <h5 class="mb-0">Shipping Address</h5>
@@ -148,13 +156,42 @@
                                                     <a href="#" class="btn-small">Edit</a>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> {% endcomment %}
+                                        
                                     </div>
+                                    {% endif %}
+                                    
                                 </div>
                                 
                                <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="card mb-3 mb-lg-0">
+                                            <div class="card-header">
+                                                <h5 class="mb-0">Account Details</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <address>{{user.first_name}} {{user.last_name}}<br> {{user.email}}<br> {{user.phone_number}}</address>
+                                                <a href="#" class="btn-small">Edit</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% comment %} <div class="col-lg-6">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="mb-0">Shipping Address</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <address>4299 Express Lane<br>
+                                                    Sarasota, <br>FL 34249 USA <br>Phone: 1.941.227.4444</address>
+                                                <p>Sarasota</p>
+                                                <a href="#" class="btn-small">Edit</a>
+                                            </div>
+                                        </div>
+                                    </div> {% endcomment %}
+                                </div>
                                 
-                                    <div class="card">
+                                    {% comment %} <div class="card">
                                         <div class="card-header">
                                             <h5>Account Details</h5>
                                         </div>
@@ -196,7 +233,7 @@
                                                 </div>
                                             </form>
                                         </div>
-                                    </div>
+                                    </div> {% endcomment %}
                                 </div>
                             </div>
                         </div>

@@ -1,6 +1,11 @@
 {% load static %}
 <!-- Quick view -->
-
+<style>
+    .img-xs {
+        width: 40px;
+        height: 40px;
+    }
+</style>
 
 <div class="mobile-header-active mobile-header-wrapper-style">
     <div class="mobile-header-wrapper-inner">
@@ -131,7 +136,15 @@
                             </div>
                             <div>
                                 {% if user.email %}
-                                    <li style="list-style: none; font-size: 25px;"><a href="{% url 'profile' %}">{{ user.first_name }}|Logout</a></li>
+                                <li class="dropdown nav-item" style="list-style: none;">
+                                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="{% static 'assets/imgs/people/avatar2.jpg' %}" alt="User"></a>
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                                        <a class="dropdown-item" href="{% url 'profile' %}"><i class="material-icons md-perm_identity"></i>Profile</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                                    </div>
+                                </li>
+                                {% comment %} <li style="list-style: none; font-size: 25px;"><a href="{% url 'profile' %}">{{ user.first_name }}|Logout</a></li> {% endcomment %}
                                 {% else %}
                                     <li style="list-style: none;"><a href="{% url 'signup' %}">Log In / Sign Up</a></li>
                                 {% endif %}

@@ -63,3 +63,23 @@ class Account(AbstractBaseUser):
 
     def has_module_perms(self, add_label):
         return True
+    
+class AddressBook(models.Model):
+    user=models.ForeignKey(Account, on_delete=models.CASCADE)
+    first_name=models.CharField(max_length=50)
+    last_name=models.CharField(max_length=50)
+    phone_number=models.CharField(max_length=50)
+    email=models.EmailField(max_length=254)
+    addressline=models.CharField(max_length=50,blank=True)
+    city=models.CharField(max_length=50)
+    state = models.CharField(max_length=50)
+    country = models.CharField(max_length=50)
+    pincode = models.CharField(max_length=10,null=True)
+    status = models.BooleanField(default=False) 
+    
+    def __str__(self):
+        return self.user.first_name
+    
+    
+    
+    

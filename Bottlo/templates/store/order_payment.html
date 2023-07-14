@@ -26,24 +26,13 @@
                             <p>{{ order.county }}</p>
                             <p>{{ order.email }}</p>
                             <p>{{ order.phone_number }}</p>
-                            <a href="#" class="btn-small">Edit</a>
+                            
                           </div>
                         </div>
                         <div class="input-style mb-20">
                           <label>Payment Method</label>
                           <div class="card-body">
-                            <div class="mb-4">
-                              <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                <input class="form-check-input" checked="" name="mycategory" type="radio" />
-                                <span class="form-check-label">Cash on delivery</span>
-                              </label>
-                            </div>
-                            <div class="mb-4">
-                              <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                <input class="form-check-input" name="mycategory" type="radio" />
-                                <span class="form-check-label">PayPal</span>
-                              </label>
-                            </div>
+                            <p>{{ order.payment.payment_method }}</p>
                           </div>
                         </div>
                       </form>
