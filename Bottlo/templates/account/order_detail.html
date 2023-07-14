@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html" rel="nofollow">Home</a>
+                <span></span> Order Details
+            </div>
+        </div>
+    </div>
+    <section class="mt-50 mb-50">
+        <div class="container">
+            
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table shopping-summery text-center">
+                            <thead>
+                                <tr class="main-heading">
+                                    <th scope="col" colspan="2">Product</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if ordr_products %}
+                                {% for ordr_product in ordr_products %}
+                                <tr>
+                                    <td class="image product-thumbnail"><img src="{{ ordr_product.product.image.url }}" alt="#"></td>
+                                    <td class="product-des product-name">
+                                        <h5 class="product-name"><a href="shop-product-right.html">{{ ordr_product.product.product_name }}</a></h5>
+                                        <p class="font-xs" style="display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;">{{ ordr_product.product.category.category_name }}</p>
+                                    </td>
+                                    <td class="price" data-title="Price"><span>₹{{ ordr_product.product.price }}</span></td>
+                                    <td class="text-center" data-title="Stock">
+                                        <span class="text font-weight-bold">{{ ordr_product.quantity }}</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                    <p>No products found.</p>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                        <div class="col-lg-6 col-md-12">
+                            {% include 'alert.html' %}
+                        <div class="border p-md-4 p-30 border-radius cart-totals">
+                            <div class="heading_s1 mb-3">
+                                <h4>Payment Details</h4>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="cart_total_label">Subtotal</td>
+                                            <td class="cart_total_amount"><span class="font-lg fw-900 text-brand">₹{{subtotal}}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="cart_total_label">Tax</td>
+                                            <td class="cart_total_amount"><span class="font-lg fw-900 text-brand">₹{{tax}}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="cart_total_label">Total</td>
+                                            <td class="cart_total_amount"><strong><span class="font-xl fw-900 text-brand">₹{{grand_total}}</span></strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="cart_total_label">Payment Method</td>
+                                            <td class="cart_total_amount"><strong><span class="font-xl fw-900 text-brand">{{ordr_products.payment.payment_method}}</span></strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% if order.status != 'Cancelled' %}
+                            <form action="{% url 'cancel_order' order.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-fill-out submit">
+                                    <i class="fi-rs-box-alt mr-10"></i> Cancel Order
+                                </button>
+                            </form>
+                            {% else %}
+                                <p style="color: red;">Order Cancelled</p>
+                            {% endif %}
+                        
+                        
+                            
+                            
+                        </div>
+                    </div>
+                    </div>
+                    
+                </div>
+            
+        </div>
+    </section>
+</main>
+{% endblock %}
