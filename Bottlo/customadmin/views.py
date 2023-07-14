@@ -7,15 +7,27 @@ from category.models import category
 from order.models import Order, OrderProduct,Payment
 from account.models import Account
 from PIL import Image
+from django.db.models import Sum
+from django.contrib.auth.decorators import login_required
 
-
+@login_required(login_url='login')
 def supuser(request):
+    
+
+    total_revenue = Payment.objects.aggregate(total=Sum('amount_paid')).get('total', 0)
+    total_order_count = Order.objects.count()
+    product_count=Product.objects.count()
+    category_count=category.objects.count()
     orders = Order.objects.all().order_by('-created_at')
     orderpayment=Payment.objects.all()
 
     context = {
         'orders': orders,
-        'orderpayment':orderpayment
+        'orderpayment':orderpayment,
+        'total_revenue':total_revenue,
+        'total_order_count':total_order_count,
+        'product_count':product_count,
+        'category_count':category_count
     }
     return render(request, 'supuser/adminhome.html', context)
   
