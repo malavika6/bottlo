@@ -74,7 +74,7 @@
                                 </table>
                             </div>
                             {% if order.status != 'Cancelled' %}
-                            <form action="{% url 'cancel_order' order.id %}" method="POST">
+                            <form action="{% url 'cancel_order' order.order_number %}" method="POST">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-fill-out submit">
                                     <i class="fi-rs-box-alt mr-10"></i> Cancel Order

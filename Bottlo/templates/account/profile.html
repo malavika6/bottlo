@@ -13,6 +13,75 @@
             </div>
         </div>
     </div>
+   
+
+<!-- Add Address Modal -->
+    <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="addAddressModalLabel">Add Address</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            <!-- Add your form fields for adding an address -->
+            <!-- For example, you can use the AddressForm fields -->
+            <form id="addAddressForm" method="POST">
+                {% csrf_token %}
+                <!-- Add the necessary input fields here -->
+                <!-- e.g., first name, last name, phone number, etc. -->
+                <input type="text" name="first_name" class="form-control my-2" placeholder="First Name" required>
+                <input type="text" name="last_name" class="form-control my-2" placeholder="Last Name" required>
+                <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
+                <input type="text" name="phone" class="form-control my-2" placeholder="Email address *" required>
+                <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
+                <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
+                <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
+                <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
+                <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
+                <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
+                <!-- Add the rest of the form fields --> 
+                
+    
+                <button type="submit" class="btn btn-primary">Add Address</button>
+            </form>
+            </div>
+        </div>
+        </div>
+    </div>
+  
+  <!-- Edit Address Modal -->
+    <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="editAddressModalLabel">Edit Address</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            <!-- Add your form fields for editing an address -->
+            <!-- For example, you can use the AddressForm fields -->
+            <form id="editAddressForm" method="POST">
+                {% csrf_token %}
+                <!-- Add the necessary input fields here -->
+                <!-- e.g., first name, last name, phone number, etc. -->
+                <input type="text" name="first_name" class="form-control my-2" placeholder="First Name" required>
+                <input type="text" name="last_name" class="form-control my-2" placeholder="Last Name" required>
+                <!-- Add the rest of the form fields -->
+    
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+            </div>
+        </div>
+        </div>
+    </div>
+  
+ 
+  
     <section class="pt-150 pb-150">
         <div class="container">
             <div class="row">
@@ -126,7 +195,11 @@
                                 </div> {% endcomment %}
                                 <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
                                     {% if not addresses %}
-                                        <a href="#" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Add New Address</a>
+                                        <!-- Add this button inside the 'address' tab pane -->
+                                        <button class="btn" id="add-address-btn" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                                            <i class="fi-rs-box-alt mr-10"></i> Add New Address
+                                        </button>
+
                                     {% else %}
                                     <div class="row">
                                         
@@ -243,4 +316,36 @@
         </div>
     </section>
 </main>
+<script>
+    // Listen for form submission
+    document.getElementById('addAddressForm').addEventListener('submit', function(event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+
+        // Get the form data
+        var formData = new FormData(this);
+
+        // Send an AJAX request to the server
+        fetch('{% url "add_address" %}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(function(response) {
+            if (response.ok) {
+                // Form submission successful
+                // Handle the response as needed
+                console.log('Address added successfully.');
+                // Reload or update the page if necessary
+            } else {
+                // Form submission failed
+                // Handle the response or display an error message
+                console.error('Failed to add address.');
+            }
+        })
+        .catch(function(error) {
+            console.error('An error occurred:', error);
+        });
+    });
+</script>
+
 {% endblock %}

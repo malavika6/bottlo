@@ -53,7 +53,7 @@
                                             <span class="text-danger font-weight-bold">Out of stock</span>
                                         </td>
                                         <td class="text-right" data-title="Cart">
-                                            <a href="" class="btn btn-sm btn-secondary"><i class="fi-rs-headset mr-5"></i>Contact Us</a>
+                                            <a href="{% url 'contact_us' %}" class="btn btn-sm btn-secondary"><i class="fi-rs-headset mr-5"></i>Contact Us</a>
                                         </td>
                                     {% endif %}
                                     <td class="action" data-title="Remove"><a href="{% url 'del_wishlist' wishlist_item.product.id %}"><i class="fi-rs-trash"></i></a></td>
