@@ -22,6 +22,8 @@ urlpatterns = [
     path('category/edit/<int:id>', views.edit_category, name="edit_category"),
     path('category/del/<int:id>', views.del_category, name='del_category'),
     
+    path('coupon/',views.coupon,name='coupon'),
+    
     path('orderslist', views.orderslist, name="orderslist"),
     path('change_status/<int:order_id>', views.change_status, name="change_status"),
     path('order_details/<int:order_id>', views.order_details, name="order_details"),

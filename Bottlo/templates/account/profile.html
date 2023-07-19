@@ -26,32 +26,46 @@
             </button>
             </div>
             <div class="modal-body">
-            <!-- Add your form fields for adding an address -->
-            <!-- For example, you can use the AddressForm fields -->
-            <form id="addAddressForm" method="POST">
-                {% csrf_token %}
-                <!-- Add the necessary input fields here -->
-                <!-- e.g., first name, last name, phone number, etc. -->
-                <input type="text" name="first_name" class="form-control my-2" placeholder="First Name" required>
-                <input type="text" name="last_name" class="form-control my-2" placeholder="Last Name" required>
-                <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
-                <input type="text" name="phone" class="form-control my-2" placeholder="Phone Number *" required>
-                <input type="text" name="address_line_1" class="form-control my-2" placeholder="House No & Locality *" required>
-                <input type="text" name=" city" class="form-control my-2" placeholder="City*" required>
-                <input type="text" name=" state " class="form-control my-2" placeholder="State*" required>
-                <input type="text" name="country" class="form-control my-2" placeholder=" Country*" required>
-                <input type="text" name=" pincode" class="form-control my-2" placeholder=" Pincode *" required>
-                <!-- Add the rest of the form fields --> 
+                {% if not address_id %}
+                <form id="addAddressForm" action="{% url 'edit_address' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="first_name" class="form-control my-2" placeholder="First Name" required>
+                    <input type="text" name="last_name" class="form-control my-2" placeholder="Last Name" required>
+                    <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
+                    <input type="text" name="phone" class="form-control my-2" placeholder="Phone Number *" required>
+                    <input type="text" name="address_line_1" class="form-control my-2" placeholder="House No & Locality *" required>
+                    <input type="text" name="address_line_2" class="form-control my-2" placeholder="House No & Locality2 *" required>
+                    <input type="text" name="city" class="form-control my-2" placeholder="City*" required>
+                    <input type="text" name="state" class="form-control my-2" placeholder="State*" required>
+                    <input type="text" name="country" class="form-control my-2" placeholder="Country*" required>
+                    <input type="text" name="pincode" class="form-control my-2" placeholder="Pincode *" required>
                 
-    
-                <button type="submit" class="btn btn-primary">Add Address</button>
-            </form>
+                    <button type="submit" class="btn btn-primary">Add Address</button>
+                </form>
+                {% else %}
+                <form id="addAddressForm" action="{% url 'add_address' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="first_name" class="form-control my-2" placeholder="First Name" required>
+                    <input type="text" name="last_name" class="form-control my-2" placeholder="Last Name" required>
+                    <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
+                    <input type="text" name="phone" class="form-control my-2" placeholder="Phone Number *" required>
+                    <input type="text" name="address_line_1" class="form-control my-2" placeholder="House No & Locality *" required>
+                    <input type="text" name="address_line_2" class="form-control my-2" placeholder="House No & Locality2 *" required>
+                    <input type="text" name="city" class="form-control my-2" placeholder="City*" required>
+                    <input type="text" name="state" class="form-control my-2" placeholder="State*" required>
+                    <input type="text" name="country" class="form-control my-2" placeholder="Country*" required>
+                    <input type="text" name="pincode" class="form-control my-2" placeholder="Pincode *" required>
+                    <button type="submit" class="btn btn-primary">Add Address</button>
+                </form>
+                {% endif %}
+          
+            
             </div>
         </div>
         </div>
     </div>
   
-  <!-- Edit Address Modal -->
+<!-- Edit Address Modal -->
     <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -61,20 +75,22 @@
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>
-            <div class="modal-body">
-            <!-- Add your form fields for editing an address -->
-            <!-- For example, you can use the AddressForm fields -->
-            <form id="editAddressForm" method="POST">
+            {% comment %} <div class="modal-body">
+            <form id="editAddressForm" action="{% url 'edit_address' address.id %}" method="POST">
                 {% csrf_token %}
-                <!-- Add the necessary input fields here -->
-                <!-- e.g., first name, last name, phone number, etc. -->
                 <input type="text" name="first_name" class="form-control my-2" placeholder="First Name" required>
                 <input type="text" name="last_name" class="form-control my-2" placeholder="Last Name" required>
-                <!-- Add the rest of the form fields -->
-    
+                <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
+                <input type="text" name="phone" class="form-control my-2" placeholder="Phone Number *" required>
+                <input type="text" name="address_line_1" class="form-control my-2" placeholder="House No & Locality *" required>
+                <input type="text" name="address_line_2" class="form-control my-2" placeholder="House No & Locality2 *" required>
+                <input type="text" name="city" class="form-control my-2" placeholder="City*" required>
+                <input type="text" name="state" class="form-control my-2" placeholder="State*" required>
+                <input type="text" name="country" class="form-control my-2" placeholder="Country*" required>
+                <input type="text" name="pincode" class="form-control my-2" placeholder="Pincode *" required>
                 <button type="submit" class="btn btn-primary">Save Changes</button>
             </form>
-            </div>
+            </div> {% endcomment %}
         </div>
         </div>
     </div>
@@ -198,24 +214,36 @@
                                         <button class="btn" id="add-address-btn" data-bs-toggle="modal" data-bs-target="#addAddressModal">
                                             <i class="fi-rs-box-alt mr-10"></i> Add New Address
                                         </button>
-
                                     {% else %}
                                     <div class="row">
-                                        
+                                        {% for address  in addresses %}
                                         <div class="col-lg-6">
+                                           
                                             <div class="card mb-3 mb-lg-0">
                                                 <div class="card-header">
                                                     <h5 class="mb-0">Billing Address</h5>
                                                 </div>
                                                 <div class="card-body">
-                                                    <address>{{addresses.first_name}}{{addresses.last_name}}<br>{{addresses.addressline}},<br> {{addresses.city}}. <br>{{addresses.state}},{{addresses.country}} <br>{{addresses.pincode}}</address>
-                                                    <a href="#" class="btn-small">Edit</a>
+                                                    <address>{{address.first_name}}{{address.last_name}}
+                                                        <br>{{address.addressline}},
+                                                        <br> {{address.city}}, 
+                                                        <br>{{address.state}},{{address.country}} 
+                                                        <br>{{address.pincode}}
+                                                    </address>
+                                                    <button class="btn" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                                                     Edit
+                                                    </button>
                                                     
                                                 </div>
                                             </div>
-                                            <a href="#" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Add New Address</a>
+                                            
+                                            
+                                            {% comment %} <a href="{% url 'address' %}}" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Add New Address</a> {% endcomment %}
                                         </div>
-                                        
+                                        {% endfor %}
+                                        <button class="btn" id="add-address-btn" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                                            <i class="fi-rs-box-alt mr-10"></i> Add New Address
+                                        </button>
                                         {% comment %} <div class="col-lg-6">
                                             <div class="card">
                                                 <div class="card-header">
@@ -314,8 +342,6 @@
             </div>
         </div>
     </section>
-
-
     <script>
         // Get the CSRF token from the cookie
         function getCookie(name) {
@@ -334,31 +360,62 @@
             return cookieValue;
         }
         var csrftoken = getCookie('csrftoken');
-
+    
         // Listen for form submission
-        document.getElementById('addAddressForm').addEventListener('submit', function(event) {
+        document.getElementById('addAddressForm').addEventListener('submit',function(event) {
             // Prevent the default form submission behavior
             event.preventDefault();
-
+    
             // Get the form data
             var formData = new FormData(this);
 
-            // Append the CSRF token to the form data
-            formData.append('csrfmiddlewaretoken', csrftoken);
+                // Retrieve the form field values
+            var firstName = document.querySelector('input[name="first_name"]').value;
+            var lastName = document.querySelector('input[name="last_name"]').value;
+            var email = document.querySelector('input[name="email"]').value;
+            var phone = document.querySelector('input[name="phone"]').value;
+            var address1 = document.querySelector('input[name="address_line_1"]').value;
+            var address2 = document.querySelector('input[name="address_line_2"]').value;
+            var city = document.querySelector('input[name="city"]').value;
+            var state = document.querySelector('input[name="state"]').value;
+            var country = document.querySelector('input[name="country"]').value;
+            var pincode = document.querySelector('input[name="pincode"]').value;
 
+             // Check if the form data has an address ID (for editing an existing address)
+            var addressId = formData.get('address_id');
+            console.log(addressId)
+
+                // Determine the appropriate URL based on whether it's an add or edit operation
+        var url = '{% url "add_address" %}';
+        if (addressId) {
+            {% comment %} url = '{% url "edit_address" %}' + addressId + '/'; {% endcomment %}
+        }
             // Send an AJAX request to the server
-            fetch('{% url "add_address" %}', {
+            fetch(url, {
                 method: 'POST',
-                body: formData,
                 headers: {
-                    'X-CSRFToken': csrftoken
-                }
+                    'Content-type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body:JSON.stringify({
+                    first_name:firstName,
+                    last_name:lastName,
+                    email,
+                    address_line_1:address1,
+                    address_line_2:address2,
+                    phone:phone,
+                    country,
+                    state,
+                    city,
+                    pincode,
+                }),
             })
             .then(function(response) {
                 if (response.ok) {
                     // Form submission successful
                     // Handle the response as needed
                     console.log('Address added successfully.');
+                    window.location.href='/profile'
                     // Reload or update the page if necessary
                 } else {
                     // Form submission failed
@@ -369,9 +426,11 @@
             .catch(function(error) {
                 console.error('An error occurred:', error);
             });
+    
+            // Submit the form
         });
     </script>
-
+    
 
 </main>
 

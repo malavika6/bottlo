@@ -1,0 +1,97 @@
+{% extends 'supuser/base.html' %}
+
+{% load static %}
+{% block content %}
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Categories </h2>
+            <p>Add, edit or delete a category</p>
+        </div>
+        <div>
+            <input type="text" placeholder="Search Categories" class="form-control bg-white">
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <form action="{% url 'add_category' %}" method="post"enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="id_category_name" class="form-label">Name</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="id_category_name" name="category_name" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="id_slug" class="form-label">Slug</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="id_slug" name="slug" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="id_description" class="form-label">Description</label>
+                            <textarea placeholder="Type here" class="form-control" id="id_description" name="description"></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label for="id_cat_image" class="form-label">Product Image</label>
+                            <input type="file" class="form-control" id="id_cat_image" name="cat_image" />
+                        </div>
+                        <div class="d-grid">
+                            <button class="btn btn-primary" type="submit">Create category</button>
+                        </div>
+                    </form> 
+                </div>
+                <div class="col-md-9">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" />
+                                        </div>
+                                    </th>
+                                    <th>ID</th>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Slug</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for categories in category %}
+                                <tr>
+                                    <td class="text-center">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" />
+                                        </div>
+                                    </td>
+                                    <td>{{categories.id}}</td>
+                                    <td>{{categories.cat_image}}</td>
+                                    <td>{{categories.category_name}}</td>
+                                    <td>{{categories.slug}}</td>
+                                    <td class="text-end">
+                                        <div class="dropdown">
+                                            <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="{% url 'edit_category' categories.id %}">Edit info</a>
+                                                <form id="deleteForm{{ categories.id }}" action="{% url 'del_category' categories.id %}" method="post" style="display: none;">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="method" value="DELETE">
+                                                  </form>
+                                                  
+                                                  <a class="dropdown-item text-danger" href="#" onclick="event.preventDefault(); document.getElementById('deleteForm{{ categories.id }}').submit();">Delete</a>
+                                                  
+
+                                            </div>
+                                        </div> <!-- dropdown //end -->
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- .col// -->
+            </div> <!-- .row // -->
+        </div> <!-- card body .// -->
+    </div> <!-- card .// -->
+</section>
+{% endblock %}

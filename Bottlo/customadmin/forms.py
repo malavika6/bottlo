@@ -1,6 +1,7 @@
 from django import forms
 from store.models import Product
-from category.models import category
+from category.models import category 
+from . models import Coupon
 
 
 
@@ -74,3 +75,15 @@ class ProductEditForm(forms.ModelForm):
             self.add_error('stock', 'Stock must be a non-negative number.')
 
         return cleaned_data
+    
+class CouponForm(forms.ModelForm):
+    class Meta:
+        model=Coupon
+        fields = ['code', 'discount', 'min_amount', 'active', 'active_date', 'expire_date']
+        widgets = {
+            'code': forms.TextInput(attrs={'class': 'form-control mb-3'}),
+            'discount': forms.NumberInput(attrs={'class': 'form-control mb-3'}),
+            'min_amount': forms.NumberInput(attrs={'class': 'form-control mb-3'}),
+            'active_date': forms.DateInput(attrs={'class': 'form-control datepicker mb-3'}),
+            'expire_date': forms.DateInput(attrs={'class': 'form-control datepicker mb-3'})
+        }

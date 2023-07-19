@@ -8,6 +8,8 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.contrib import messages
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
+import json
+from django.http import JsonResponse
 
 
 def home(request):
@@ -75,7 +77,7 @@ def order_detail(request, order_id):
 
 
 def cancel_order(request, order_id):
-    print(order_id,'hii')
+    print(order_id, 'hii')
     try:
         order = Order.objects.get(order_number=order_id)
         print(order_id)
@@ -93,18 +95,32 @@ def cancel_order(request, order_id):
 
 
 def add_address(request):
-    form = AddressForm()
 
     if request.method == "POST":
-        form = AddressForm(request.POST)
+        form_data = json.loads(request.body.decode('utf-8'))
+        form = AddressForm(form_data)
         if form.is_valid():
-            print("hhhhh")
             address = form.save(commit=False)
             address.user = request.user
-            print(address)
             address.save()
             return JsonResponse({'success': True})
         else:
             return JsonResponse({'success': False})
 
+    return JsonResponse({'success': False})
+
+
+def edit_address(request,id):
+    address = get_object_or_404(AddressBook,id=id, user=request.user)
+    print(address)
+    if request.method == "POST":
+        form_data = json.loads(request.body.decode('utf-8'))
+        form = AddressForm(form_data,instance=address)
+        if form.is_valid():
+            address = form.save(commit=False)
+            address.save()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False})
+    
     return JsonResponse({'success': False})
