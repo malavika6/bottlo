@@ -10,7 +10,9 @@ urlpatterns = [
     path('usermanagement/block/<int:id>/',views.block_user, name='block_user'),
     path('usermanagement/unblock/<int:id>/',views.unblock_user, name='unblock_user'),
 
+    path('searchs/',views.search,name='searchs'),
     path('product/', views.product_list, name='product'),
+    path('category/<slug:category_slug>/', views.product_list, name="product_list_by_category"),
     path('product/add/',views.add_product,name="add_product"),
     path('product/edit/<int:id>', views.edit_product, name="edit_product"),
     path('product/del/<int:id>', views.del_product, name='del_product'),

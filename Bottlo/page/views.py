@@ -51,9 +51,7 @@ def order_detail(request, order_id):
     try:
         ordr_products = OrderProduct.objects.filter(
             order__order_number=order_id)
-        print(ordr_products, "hi")
         order = Order.objects.get(order_number=order_id)
-        print(order_id, "k")
 
         subtotal = 0
         for i in ordr_products:
@@ -67,13 +65,11 @@ def order_detail(request, order_id):
             'subtotal': subtotal,
             'grand_total': grand_total
         }
-        print(ordr_products, "hello")
     except Order.DoesNotExist:
         # Handle the case when the order does not exist
         context = {
             'error_message': 'Order does not exist.'
         }
-        print(context)
 
     return render(request, 'account/order_detail.html', context)
 
@@ -95,20 +91,6 @@ def cancel_order(request, order_id):
         messages.error(request, "Order does not exist.")
         return redirect('order_detail')
 
-# def add_address(request):
-#     form = AddressForm()
-#     if request.method == "POST":
-#         form = AddressForm(request.POST)
-#         if form.is_valid():
-#             saveform=form.save(commit=False)
-#             saveform.user= request.user
-#             saveform.save()
-#             messages.success(request,"New Address added sucessfully.!")
-#             return redirect('my_addresses')
-#     context={
-#         'form':form
-#     }
-
 
 def add_address(request):
     form = AddressForm()
@@ -116,6 +98,7 @@ def add_address(request):
     if request.method == "POST":
         form = AddressForm(request.POST)
         if form.is_valid():
+            print("hhhhh")
             address = form.save(commit=False)
             address.user = request.user
             print(address)

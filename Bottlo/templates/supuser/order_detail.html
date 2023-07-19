@@ -66,7 +66,6 @@
                                 {{ order.address_line_1 }}<br>
                                 {{ order.address_line_2 }}
                             </p>
-                            <a href="#">View profile</a>
                         </div>
                     </article>
                 </div> <!-- col// -->
@@ -84,19 +83,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for ord_product in order_product %}
+                                {% for ordr_product in ordr_products %}
                                 <tr>
                                     <td>
                                         <a class="itemside" href="#">
                                             <div class="left">
-                                                <img src="{{ ord_product.image.url }}" width="40" height="40" class="img-xs" alt="Item">
+                                                <img src="{{ ordr_product.product.image.url }}" width="40" height="40" class="img-xs" alt="Item">
                                             </div>
-                                            <div class="info">{{ ord_product.product.name }}</div>
+                                            <div class="info">{{ ordr_product.product.product_name }}</div>
                                         </a>
                                     </td>
-                                    <td>₹{{ ord_product.product.price|floatformat:2 }}</td>
-                                    <td>{{ ord_product.quantity }}</td>
-                                    <td class="text-end">₹{{ ord_product.product.price|floatformat:2 }}</td>
+                                    <td>₹{{ ordr_product.product.price }}</td>
+                                    <td>{{ ordr_product.quantity }}</td>
+                                    <td class="text-end">₹{{ subtotal }}</td>
                                 </tr>
                                 {% endfor %}
                                 <tr>
@@ -104,7 +103,7 @@
                                         <article class="float-end">
                                             <dl class="dlist">
                                                 <dt>Subtotal:</dt>
-                                                <dd>₹{{ order.subtotal|floatformat:2 }}</dd>
+                                                <dd>₹{{ subtotal }}</dd>
                                             </dl>
                                             <dl class="dlist">
                                                 <dt>Tax:</dt>
@@ -132,17 +131,10 @@
                     <div class="box shadow-sm bg-light">
                         <h6 class="mb-15">Payment info</h6>
                         <p>
-                            <img src="assets/imgs/card-brands/2.png" class="border" height="20"> Master Card **** **** 47686666 <br>
-                            Business name: Grand Market LLC <br>
-                            Phone: +1 (800) 555-154-52
+                            <img src={% static 'assets/imgs/card-brands/3.png' %} class="border" height="20"> {{ order.payment.payment_method }} <br>
+                            payee: Grand Market LLC <br>
+                            Phone:{{ user.phone_number }}
                         </p>
-                    </div>
-                    <div class="h-25 pt-4">
-                        <div class="mb-3">
-                            <label>Notes</label>
-                            <textarea class="form-control" name="notes" id="notes" placeholder="Type some note"></textarea>
-                        </div>
-                        <button class="btn btn-primary">Save note</button>
                     </div>
                 </div> <!-- col// -->
             </div>

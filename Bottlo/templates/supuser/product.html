@@ -17,19 +17,23 @@
         <header class="card-header">
             <div class="row gx-3">
                 <div class="col-lg-4 col-md-6 me-auto">
-                    <input type="text" placeholder="Search..." class="form-control">
+                    <form action="{% url 'searchs' %}">
+                        <input type="text" placeholder="Search..." class="form-control" name="keyword">
+                        {% comment %} <button type="submit"><i class="fi-rs-search"></i></button> {% endcomment %}
+                    </form> 
                 </div>
                 <div class="col-lg-2 col-6 col-md-3">
-                    <select class="form-select">
+                    <select class="form-select" onchange="window.location.href = this.value;">
                         <option>All category</option>
-                        <option>Electronics</option>
-                        <option>Clothings</option>
-                        <option>Something else</option>
+                        {% for category in links %}
+                            <option value="{{ category.get_url}}">{{ category.category_name }}</option>
+                        {% endfor %}
                     </select>
                 </div>
+                
                 {% comment %} <div class="col-lg-2 col-6 col-md-3">
                     <select class="form-select">
-                        <option>Latest added</option>
+                        {{category.category_name}}
                         <option>Cheap first</option>
                         <option>Most viewed</option>
                     </select>
@@ -38,7 +42,7 @@
         </header> <!-- card-header end// -->
         <div class="card-body">
             
-            <div class="row gx-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5">
+            <div class="row gx-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-4">
                 {% for products in product %}
                 <div class="col">
                     <div class="card card-product-grid">
@@ -60,6 +64,27 @@
                 </div> <!-- col.// --> 
                 {% endfor %}
             </div> <!-- row.// -->
+            <!--pagination-->
+            {% if product.has_other_pages %}
+            <div class="pagination-area mt-15 mb-sm-5 mb-lg-0">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        {% for i in product.paginator.page_range %}
+                            {% if product.number == i %}
+                                <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{i}}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if product.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{product.next_page_number}}"><i class="material-icons md-chevron_right"></i></a></li>
+                        {% else %}
+                            <li class="page-item disabled"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            {% endif %}
         </div> <!-- card-body end// -->
     </div> <!-- card end// -->
 

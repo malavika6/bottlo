@@ -327,7 +327,7 @@
                                             <i class="material-icons md-payment font-xxl text-muted mr-5"></i> {{order.payment.payment_method}}
                                         </td>
                                         <td>
-                                            <a href="#" class="btn btn-xs"> View details</a>
+                                            <a href="{% url 'order_details' order.order_number %}" class="btn btn-xs"> View details</a>
                                         </td>
                                     </tr>
                                     {% endfor %}

@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .forms import ProductEditForm, CategoryForm
 from category.models import category
 from order.models import Order, OrderProduct,Payment
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from account.models import Account
 from PIL import Image
 from django.db.models import Sum
@@ -34,7 +35,7 @@ def supuser(request):
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
+@login_required(login_url='login')
 def usermanagement(request):
 
     users = Account.objects.filter(
@@ -61,17 +62,83 @@ def unblock_user(request, id):
         return redirect('usermanagement')
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+# @login_required(login_url='login')
+# def product_list(request,category_slug=None):
+#     categories = None
+#     products = None
 
-def product_list(request):
-    products = Product.objects.all().filter(is_available=True)
+#     if category_slug is not None:
+#         categories = get_object_or_404(category, slug=category_slug)
+#         products = Product.objects.filter(category=categories, is_available=True).prefetch_related('productimage_set')
+#         paginator = Paginator(products, 6)
+#         page = request.GET.get('page')
+#         paged_products = paginator.get_page(page)
+#         product_count = products.count()
 
+#     else:
+#         products = Product.objects.all().filter(is_available=True).prefetch_related('productimage_set')
+#         paginator = Paginator(products, 9) 
+#         page = request.GET.get('page')
+#         paged_products = paginator.get_page(page)
+#         product_count = products.count()
+#         categories = category.objects.all()
+
+#     context = {
+#         "product": paged_products,
+#         "product_count": product_count,
+#         "categories": categories,
+#     }
+
+#     return render(request, "supuser/product.html", context)
+
+def product_list(request, category_slug=None):
+    categories = None
+    products = None
+
+    if category_slug is not None:
+        categories = get_object_or_404(category, slug=category_slug)
+        products = Product.objects.filter(category=categories, is_available=True).prefetch_related('productimage_set')
+        paginator = Paginator(products, 6)
+        page = request.GET.get('page')
+        paged_products = paginator.get_page(page)
+        product_count = products.count()
+    else:
+        products = Product.objects.all().filter(is_available=True).prefetch_related('productimage_set')
+        paginator = Paginator(products, 9) 
+        page = request.GET.get('page')
+        paged_products = paginator.get_page(page)
+        product_count = products.count()
+        categories = category.objects.all()
     context = {
-        "product": products,
-    }
-
+            "product": paged_products,
+            "product_count": product_count,
+            "categories": categories,
+        }
     return render(request, "supuser/product.html", context)
+    
+
+    
+        # Rest of the code for rendering the product list page without a specific category
 
 
+def search(request):
+    keyword = request.GET.get('keyword')
+    print(keyword)
+    products = None
+    product_count = 0
+    
+    if keyword:
+       products = Product.objects.filter(product_name__icontains=keyword)
+       product_count = products.count()
+       print(products)
+    
+    context = {
+        'product': products,
+        "product_count" : product_count
+    }
+    return render(request, "supuser/product.html",context)
+
+@login_required(login_url='login')
 def add_product(request):
 
     if request.method == 'POST':
@@ -88,7 +155,7 @@ def add_product(request):
     }
     return render(request, 'supuser/add_product.html', context)
 
-
+@login_required(login_url='login')
 def edit_product(request, id):
 
     products = get_object_or_404(Product, id=id)
@@ -107,16 +174,16 @@ def edit_product(request, id):
 
     return render(request, 'supuser/edit_product.html', {'form': form, 'products': products})
 
-
+@login_required(login_url='login')
 def del_product(request, id):
     if request.method == 'POST':
         prod = Product.objects.get(id=id)
         prod.delete()
     return redirect('product')
 
-# -----------------------------------------------------CATEGOTY-MANAGE-------------------------------------------------------------------------------
+# -----------------------------------------------------CATEGORY-MANAGE-------------------------------------------------------------------------------
 
-
+@login_required(login_url='login')
 def category_list(request):
 
     categories = category.objects.all()
@@ -125,7 +192,7 @@ def category_list(request):
     }
     return render(request, 'supuser/category.html', context)
 
-
+@login_required(login_url='login')
 def add_category(request):
     if request.method == "POST":
         form = CategoryForm(request.POST,request.FILES)
@@ -139,7 +206,7 @@ def add_category(request):
     }
     return render(request, 'supuser/category.html', context)
 
-
+@login_required(login_url='login')
 def edit_category(request, id):
 
     categories= get_object_or_404(category, id=id)
@@ -158,7 +225,7 @@ def edit_category(request, id):
 
     return render(request, 'supuser/edit_category.html', {'form': form, 'categories': categories})
 
-
+@login_required(login_url='login')
 def del_category(request, id):
     if request.method == "POST":
         crt = category.objects.get(id=id)
@@ -166,7 +233,7 @@ def del_category(request, id):
     return redirect('category')
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
+@login_required(login_url='login')
 def orderslist(request):
     orders = Order.objects.all().order_by('-created_at')
    
@@ -177,7 +244,7 @@ def orderslist(request):
     }
     return render(request, 'supuser/order_list.html', context)
 
-
+@login_required(login_url='login')
 def change_status(request, order_id):
     if request.method == 'POST':
         status = request.POST.get('status')
@@ -190,28 +257,29 @@ def change_status(request, order_id):
 
     return redirect('orderslist')
 
-
+@login_required(login_url='login')
 def order_details(request, order_id):
+    print("hello")
     try:
+        ordr_products = OrderProduct.objects.filter(
+            order__order_number=order_id)
+        order = Order.objects.get(order_number=order_id)
         subtotal = 0
-        ordr_product = OrderProduct.objects.filter(order__order_number=order_id)
-        order, created = Order.objects.get_or_create(id=order_id)
-        payment=Payment.objects.filter(order=order)
-        for i in ordr_product:
-            if i.product.price:
-                subtotal += i.product.price * i.quantity
-            else:
-                subtotal += i.product.price * i.quantity
+        for i in ordr_products:
+            subtotal += i.product_price*i.quantity
+        tax = (2 * subtotal) / 100
+        grand_total = subtotal + tax
         context = {
-            'ordr_product': ordr_product,
+            'ordr_products': ordr_products,
+            'tax': tax,
             'order': order,
-            'payment':payment,
-            'subtotal' : subtotal,
+            'subtotal': subtotal,
+            'grand_total': grand_total
         }
     except Order.DoesNotExist:
         # Handle the case when the order does not exist
         context = {
-            'error_message ': 'Order does not exist.'
+            'error_message': 'Order does not exist.'
         }
 
 

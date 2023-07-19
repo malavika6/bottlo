@@ -35,13 +35,12 @@
                 <input type="text" name="first_name" class="form-control my-2" placeholder="First Name" required>
                 <input type="text" name="last_name" class="form-control my-2" placeholder="Last Name" required>
                 <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
-                <input type="text" name="phone" class="form-control my-2" placeholder="Email address *" required>
-                <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
-                <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
-                <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
-                <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
-                <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
-                <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
+                <input type="text" name="phone" class="form-control my-2" placeholder="Phone Number *" required>
+                <input type="text" name="address_line_1" class="form-control my-2" placeholder="House No & Locality *" required>
+                <input type="text" name=" city" class="form-control my-2" placeholder="City*" required>
+                <input type="text" name=" state " class="form-control my-2" placeholder="State*" required>
+                <input type="text" name="country" class="form-control my-2" placeholder=" Country*" required>
+                <input type="text" name=" pincode" class="form-control my-2" placeholder=" Pincode *" required>
                 <!-- Add the rest of the form fields --> 
                 
     
@@ -315,37 +314,66 @@
             </div>
         </div>
     </section>
-</main>
-<script>
-    // Listen for form submission
-    document.getElementById('addAddressForm').addEventListener('submit', function(event) {
-        // Prevent the default form submission behavior
-        event.preventDefault();
 
-        // Get the form data
-        var formData = new FormData(this);
 
-        // Send an AJAX request to the server
-        fetch('{% url "add_address" %}', {
-            method: 'POST',
-            body: formData
-        })
-        .then(function(response) {
-            if (response.ok) {
-                // Form submission successful
-                // Handle the response as needed
-                console.log('Address added successfully.');
-                // Reload or update the page if necessary
-            } else {
-                // Form submission failed
-                // Handle the response or display an error message
-                console.error('Failed to add address.');
+    <script>
+        // Get the CSRF token from the cookie
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
             }
-        })
-        .catch(function(error) {
-            console.error('An error occurred:', error);
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+
+        // Listen for form submission
+        document.getElementById('addAddressForm').addEventListener('submit', function(event) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+
+            // Get the form data
+            var formData = new FormData(this);
+
+            // Append the CSRF token to the form data
+            formData.append('csrfmiddlewaretoken', csrftoken);
+
+            // Send an AJAX request to the server
+            fetch('{% url "add_address" %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrftoken
+                }
+            })
+            .then(function(response) {
+                if (response.ok) {
+                    // Form submission successful
+                    // Handle the response as needed
+                    console.log('Address added successfully.');
+                    // Reload or update the page if necessary
+                } else {
+                    // Form submission failed
+                    // Handle the response or display an error message
+                    console.error('Failed to add address.');
+                }
+            })
+            .catch(function(error) {
+                console.error('An error occurred:', error);
+            });
         });
-    });
-</script>
+    </script>
+
+
+</main>
+
 
 {% endblock %}
