@@ -79,11 +79,11 @@ class ProductEditForm(forms.ModelForm):
 class CouponForm(forms.ModelForm):
     class Meta:
         model=Coupon
-        fields = ['code', 'discount', 'min_amount', 'active', 'active_date', 'expire_date']
+        exclude = ['code'] 
+        fields = ['discount', 'min_amount', 'active', 'active_date', 'expiry_date']
         widgets = {
-            'code': forms.TextInput(attrs={'class': 'form-control mb-3'}),
             'discount': forms.NumberInput(attrs={'class': 'form-control mb-3'}),
             'min_amount': forms.NumberInput(attrs={'class': 'form-control mb-3'}),
             'active_date': forms.DateInput(attrs={'class': 'form-control datepicker mb-3'}),
-            'expire_date': forms.DateInput(attrs={'class': 'form-control datepicker mb-3'})
+            'expiry_date': forms.DateInput(attrs={'class': 'form-control datepicker mb-3'})
         }

@@ -33,7 +33,6 @@ def signup(request):
             user.save()
             request.session['email'] = email
             verify.send(phone_number)
-            print(phone_number)
             # messages.success(request, "Registration successfull")
             return redirect('verify_code')
     context = {
@@ -42,15 +41,31 @@ def signup(request):
     return render(request, "account/signup.html", context)
 
 
+# def verify_code(request):
+#     if request.method == 'POST':
+#         form = VerifyForm(request.POST)
+#         if form.is_valid():
+#             code = form.cleaned_data['code']
+#             user = Account._default_manager.get(
+#                 email=request.session.get('email'))
+#             if verify.check(user.phone_number,code):
+#                 user.is_active = True
+#                 user.is_verified = True
+#                 user.save()
+#                 print("hidishdl")
+#                 return redirect('login')
+#     else:
+#         form = VerifyForm()
+#     return render(request, 'account/verify.html', {'form': form})
+
 def verify_code(request):
     if request.method == 'POST':
         form = VerifyForm(request.POST)
-        print(form, 'hiii')
         if form.is_valid():
             code = form.cleaned_data['code']
             user = Account._default_manager.get(
                 email=request.session.get('email'))
-            if verify.check(user.phone_number, code):
+            if verify.check(user.phone_number,code):
                 user.is_active = True
                 user.is_verified = True
                 user.save()
@@ -58,7 +73,6 @@ def verify_code(request):
     else:
         form = VerifyForm()
     return render(request, 'account/verify.html', {'form': form})
-
 
 def login(request):
     if request.method == "POST":

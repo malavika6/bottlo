@@ -17,7 +17,7 @@
                                         <h3 class="mb-30">Verification</h3>
                                     </div>
                                     {% include 'alert.html' %}
-                                    <form action="{% url 'login' %}" method="POST">
+                                    <form action="{% url 'verify_code' %}" method="POST">
                                         {% csrf_token %}
                                         <div class="form-group">
                                             

@@ -23,6 +23,9 @@ urlpatterns = [
     path('category/del/<int:id>', views.del_category, name='del_category'),
     
     path('coupon/',views.coupon,name='coupon'),
+    path('add_coupon', views.add_coupon, name="add_coupon"),
+    path('coupon/active/<int:id>/',views.active, name='active'),
+    path('coupon/desable/<int:id>/',views.desable, name='desable'), 
     
     path('orderslist', views.orderslist, name="orderslist"),
     path('change_status/<int:order_id>', views.change_status, name="change_status"),

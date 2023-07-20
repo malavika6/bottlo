@@ -2,36 +2,38 @@ from django.shortcuts import render, redirect, get_object_or_404
 from store.admin import ProductAdmin
 from store.models import Product
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import ProductEditForm, CategoryForm
+from .forms import ProductEditForm, CategoryForm, CouponForm
+from . models import Coupon
 from category.models import category
-from order.models import Order, OrderProduct,Payment
+from order.models import Order, OrderProduct, Payment
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from account.models import Account
 from PIL import Image
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 
+
 @login_required(login_url='login')
 def supuser(request):
-    
 
-    total_revenue = Payment.objects.aggregate(total=Sum('amount_paid')).get('total', 0)
+    total_revenue = Payment.objects.aggregate(
+        total=Sum('amount_paid')).get('total', 0)
     total_order_count = Order.objects.count()
-    product_count=Product.objects.count()
-    category_count=category.objects.count()
+    product_count = Product.objects.count()
+    category_count = category.objects.count()
     orders = Order.objects.all().order_by('-created_at')
-    orderpayment=Payment.objects.all()
+    orderpayment = Payment.objects.all()
 
     context = {
         'orders': orders,
-        'orderpayment':orderpayment,
-        'total_revenue':total_revenue,
-        'total_order_count':total_order_count,
-        'product_count':product_count,
-        'category_count':category_count
+        'orderpayment': orderpayment,
+        'total_revenue': total_revenue,
+        'total_order_count': total_order_count,
+        'product_count': product_count,
+        'category_count': category_count
     }
     return render(request, 'supuser/adminhome.html', context)
-  
+
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -77,7 +79,7 @@ def unblock_user(request, id):
 
 #     else:
 #         products = Product.objects.all().filter(is_available=True).prefetch_related('productimage_set')
-#         paginator = Paginator(products, 9) 
+#         paginator = Paginator(products, 9)
 #         page = request.GET.get('page')
 #         paged_products = paginator.get_page(page)
 #         product_count = products.count()
@@ -91,34 +93,35 @@ def unblock_user(request, id):
 
 #     return render(request, "supuser/product.html", context)
 
+
 def product_list(request, category_slug=None):
     categories = None
     products = None
 
     if category_slug is not None:
         categories = get_object_or_404(category, slug=category_slug)
-        products = Product.objects.filter(category=categories, is_available=True).prefetch_related('productimage_set')
+        products = Product.objects.filter(
+            category=categories, is_available=True).prefetch_related('productimage_set')
         paginator = Paginator(products, 6)
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
         product_count = products.count()
     else:
-        products = Product.objects.all().filter(is_available=True).prefetch_related('productimage_set')
-        paginator = Paginator(products, 9) 
+        products = Product.objects.all().filter(
+            is_available=True).prefetch_related('productimage_set')
+        paginator = Paginator(products, 9)
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
         product_count = products.count()
         categories = category.objects.all()
     context = {
-            "product": paged_products,
-            "product_count": product_count,
-            "categories": categories,
-        }
+        "product": paged_products,
+        "product_count": product_count,
+        "categories": categories,
+    }
     return render(request, "supuser/product.html", context)
-    
 
-    
-        # Rest of the code for rendering the product list page without a specific category
+    # Rest of the code for rendering the product list page without a specific category
 
 
 def search(request):
@@ -126,17 +129,18 @@ def search(request):
     print(keyword)
     products = None
     product_count = 0
-    
+
     if keyword:
-       products = Product.objects.filter(product_name__icontains=keyword)
-       product_count = products.count()
-       print(products)
-    
+        products = Product.objects.filter(product_name__icontains=keyword)
+        product_count = products.count()
+        print(products)
+
     context = {
         'product': products,
-        "product_count" : product_count
+        "product_count": product_count
     }
-    return render(request, "supuser/product.html",context)
+    return render(request, "supuser/product.html", context)
+
 
 @login_required(login_url='login')
 def add_product(request):
@@ -154,6 +158,7 @@ def add_product(request):
         "form": form,
     }
     return render(request, 'supuser/add_product.html', context)
+
 
 @login_required(login_url='login')
 def edit_product(request, id):
@@ -174,6 +179,7 @@ def edit_product(request, id):
 
     return render(request, 'supuser/edit_product.html', {'form': form, 'products': products})
 
+
 @login_required(login_url='login')
 def del_product(request, id):
     if request.method == 'POST':
@@ -182,6 +188,7 @@ def del_product(request, id):
     return redirect('product')
 
 # -----------------------------------------------------CATEGORY-MANAGE-------------------------------------------------------------------------------
+
 
 @login_required(login_url='login')
 def category_list(request):
@@ -192,10 +199,11 @@ def category_list(request):
     }
     return render(request, 'supuser/category.html', context)
 
+
 @login_required(login_url='login')
 def add_category(request):
     if request.method == "POST":
-        form = CategoryForm(request.POST,request.FILES)
+        form = CategoryForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('category')
@@ -206,10 +214,11 @@ def add_category(request):
     }
     return render(request, 'supuser/category.html', context)
 
+
 @login_required(login_url='login')
 def edit_category(request, id):
 
-    categories= get_object_or_404(category, id=id)
+    categories = get_object_or_404(category, id=id)
 
     if request.method == 'POST':
 
@@ -225,25 +234,27 @@ def edit_category(request, id):
 
     return render(request, 'supuser/edit_category.html', {'form': form, 'categories': categories})
 
+
 @login_required(login_url='login')
 def del_category(request, id):
     if request.method == "POST":
         crt = category.objects.get(id=id)
         crt.delete()
     return redirect('category')
-#------------------------------------------------------------------------------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 @login_required(login_url='login')
 def orderslist(request):
     orders = Order.objects.all().order_by('-created_at')
-   
 
     context = {
         'orders': orders,
-        
+
     }
     return render(request, 'supuser/order_list.html', context)
+
 
 @login_required(login_url='login')
 def change_status(request, order_id):
@@ -257,6 +268,7 @@ def change_status(request, order_id):
             pass
 
     return redirect('orderslist')
+
 
 @login_required(login_url='login')
 def order_details(request, order_id):
@@ -283,11 +295,47 @@ def order_details(request, order_id):
             'error_message': 'Order does not exist.'
         }
 
-
     return render(request, 'supuser/order_detail.html', context)
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+@login_required(login_url='login')
 def coupon(request):
-    return render(request,'')
+    coupon = Coupon.objects.all().order_by('created_at')
+    context = {
+        'coupon': coupon,
+    }
+    return render(request, 'supuser/coupon.html', context)
+
+
+@login_required(login_url='login')
+def add_coupon(request):
+    form = CouponForm()
+    if request.method == "POST":
+        form = CouponForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('coupon')
+    else:
+        form = CouponForm()
+    context = {
+        "form": form
+    }
+    return render(request, 'supuser/coupon.html', context)
+
+
+def desable(request, id):
+    if request.method == 'POST':
+        pi = Coupon.objects.get(id=id)
+        pi.active = False
+        pi.save()
+        return redirect('coupon')
+
+
+def active(request, id):
+    if request.method == 'POST':
+        pi = Coupon.objects.get(id=id)
+        pi.active = True
+        pi.save()
+        return redirect('coupon')

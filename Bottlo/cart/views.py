@@ -129,6 +129,11 @@ def del_cart(request, product_id):
     return redirect('cart')
 
 
+
+def apply_coupon(request):
+    return render(request,'')
+
+
 @login_required(login_url='login')
 def checkout(request):
     total = 0
