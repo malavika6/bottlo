@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from store.admin import ProductAdmin
 from store.models import Product
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import ProductEditForm, CategoryForm, CouponForm
+from .forms import ProductEditForm, CategoryForm, CouponForm,OrderFilterForm
 from . models import Coupon
 from category.models import category
 from order.models import Order, OrderProduct, Payment
@@ -93,7 +93,7 @@ def unblock_user(request, id):
 
 #     return render(request, "supuser/product.html", context)
 
-
+@login_required(login_url='login')
 def product_list(request, category_slug=None):
     categories = None
     products = None
@@ -247,12 +247,20 @@ def del_category(request, id):
 
 @login_required(login_url='login')
 def orderslist(request):
+    form = OrderFilterForm(request.GET)  # Bind the form to the GET data
+
     orders = Order.objects.all().order_by('-created_at')
+
+    if form.is_valid():
+        status = form.cleaned_data['status']
+        if status:  # If a status is selected, filter the orders accordingly
+            orders = orders.filter(status=status)
 
     context = {
         'orders': orders,
-
+        'form': form,  # Pass the form to the template for displaying the filter
     }
+
     return render(request, 'supuser/order_list.html', context)
 
 

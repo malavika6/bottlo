@@ -7,6 +7,11 @@ from django.contrib.auth.decorators import login_required
 from decimal import Decimal
 from django.contrib import messages
 from django.urls import reverse
+from datetime import datetime
+import json
+from customadmin.models import Coupon
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.http import require_POST
 
 
 def cart(request):
@@ -15,14 +20,17 @@ def cart(request):
     cart_items = None
     tax = 0
     grand_total = 0
+    coupon = None
 
     try:
         if request.user.is_authenticated:
             cart_items = Cartitem.objects.filter(
                 user=request.user, is_active=True)
+            coupon=Coupon.objects.filter(active=True)
         else:
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items = Cartitem.objects.filter(cart=cart, is_active=True)
+            coupon=Coupon.objects.filter(active=True)
         for cart_item in cart_items:
             total += (cart_item.product.price * cart_item.quantity)
             quantity += cart_item.quantity
@@ -36,7 +44,8 @@ def cart(request):
         'quantity': quantity,
         'cart_items': cart_items,
         'tax': tax,
-        'grand_total': grand_total
+        'grand_total': grand_total,
+        'coupon':coupon
     }
 
     return render(request, 'store/cart.html', context)
@@ -130,8 +139,42 @@ def del_cart(request, product_id):
 
 
 
+@require_POST
 def apply_coupon(request):
-    return render(request,'')
+    body = json.loads(request.body)
+    grand_total = int(body['grand_total'])
+    coupon_code = body['coupon']
+    print(coupon_code)
+    try:
+        coupon = Coupon.objects.get(code__iexact=coupon_code)
+       
+    except Coupon.DoesNotExist:
+        data = {
+            "total": grand_total,
+            "message": "Not a Valid Coupon"
+        }
+    else:
+        today = datetime.now().date()
+        start_date = coupon.active_date
+        expiry_date = coupon.expiry_date
+        min_amount = int(coupon.min_amount)
+        if min_amount < grand_total and start_date <= today <= expiry_date:
+            discount_percentage = int(coupon.discount)
+            discount_amount = (discount_percentage / 100) * grand_total
+
+        # Subtract the discount amount from the grand_total
+            grand_total -= discount_amount
+            request.session['total'] = grand_total
+            data = {
+                "total": grand_total,
+                "message": f"{coupon.code} Applied"
+            }
+        else:
+            data = {
+                "total": grand_total,
+                "message": "Not a Valid Coupon"
+            }
+    return JsonResponse(data)
 
 
 @login_required(login_url='login')

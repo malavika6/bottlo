@@ -87,3 +87,13 @@ class CouponForm(forms.ModelForm):
             'active_date': forms.DateInput(attrs={'class': 'form-control datepicker mb-3'}),
             'expiry_date': forms.DateInput(attrs={'class': 'form-control datepicker mb-3'})
         }
+
+class OrderFilterForm(forms.Form):
+    status_choices = [
+        ('', 'Status'),  # Empty choice to represent the default selection
+        ('New', 'New'),
+        ('Cancelled', 'Cancelled'),
+        ('Accepted', 'Accepted'),
+        ('Completed', 'Completed'),
+    ]
+    status = forms.ChoiceField(choices=status_choices, required=False)

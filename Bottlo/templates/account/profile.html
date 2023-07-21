@@ -26,23 +26,7 @@
             </button>
             </div>
             <div class="modal-body">
-                {% if not address_id %}
-                <form id="addAddressForm" action="{% url 'edit_address' %}" method="POST">
-                    {% csrf_token %}
-                    <input type="text" name="first_name" class="form-control my-2" placeholder="First Name" required>
-                    <input type="text" name="last_name" class="form-control my-2" placeholder="Last Name" required>
-                    <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
-                    <input type="text" name="phone" class="form-control my-2" placeholder="Phone Number *" required>
-                    <input type="text" name="address_line_1" class="form-control my-2" placeholder="House No & Locality *" required>
-                    <input type="text" name="address_line_2" class="form-control my-2" placeholder="House No & Locality2 *" required>
-                    <input type="text" name="city" class="form-control my-2" placeholder="City*" required>
-                    <input type="text" name="state" class="form-control my-2" placeholder="State*" required>
-                    <input type="text" name="country" class="form-control my-2" placeholder="Country*" required>
-                    <input type="text" name="pincode" class="form-control my-2" placeholder="Pincode *" required>
-                
-                    <button type="submit" class="btn btn-primary">Add Address</button>
-                </form>
-                {% else %}
+                {% if not address.id %}
                 <form id="addAddressForm" action="{% url 'add_address' %}" method="POST">
                     {% csrf_token %}
                     <input type="text" name="first_name" class="form-control my-2" placeholder="First Name" required>
@@ -57,6 +41,24 @@
                     <input type="text" name="pincode" class="form-control my-2" placeholder="Pincode *" required>
                     <button type="submit" class="btn btn-primary">Add Address</button>
                 </form>
+
+                {% else %}
+                <form id="addAddressForm" action="{% url 'edit_address' address.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="first_name" class="form-control my-2" placeholder="First Name" required>
+                    <input type="text" name="last_name" class="form-control my-2" placeholder="Last Name" required>
+                    <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
+                    <input type="text" name="phone" class="form-control my-2" placeholder="Phone Number *" required>
+                    <input type="text" name="address_line_1" class="form-control my-2" placeholder="House No & Locality *" required>
+                    <input type="text" name="address_line_2" class="form-control my-2" placeholder="House No & Locality2 *" required>
+                    <input type="text" name="city" class="form-control my-2" placeholder="City*" required>
+                    <input type="text" name="state" class="form-control my-2" placeholder="State*" required>
+                    <input type="text" name="country" class="form-control my-2" placeholder="Country*" required>
+                    <input type="text" name="pincode" class="form-control my-2" placeholder="Pincode *" required>
+                
+                    <button type="submit" class="btn btn-primary">Add Address</button>
+                </form>
+               
                 {% endif %}
           
             
@@ -64,39 +66,7 @@
         </div>
         </div>
     </div>
-  
-<!-- Edit Address Modal -->
-    <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="editAddressModalLabel">Edit Address</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            {% comment %} <div class="modal-body">
-            <form id="editAddressForm" action="{% url 'edit_address' address.id %}" method="POST">
-                {% csrf_token %}
-                <input type="text" name="first_name" class="form-control my-2" placeholder="First Name" required>
-                <input type="text" name="last_name" class="form-control my-2" placeholder="Last Name" required>
-                <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
-                <input type="text" name="phone" class="form-control my-2" placeholder="Phone Number *" required>
-                <input type="text" name="address_line_1" class="form-control my-2" placeholder="House No & Locality *" required>
-                <input type="text" name="address_line_2" class="form-control my-2" placeholder="House No & Locality2 *" required>
-                <input type="text" name="city" class="form-control my-2" placeholder="City*" required>
-                <input type="text" name="state" class="form-control my-2" placeholder="State*" required>
-                <input type="text" name="country" class="form-control my-2" placeholder="Country*" required>
-                <input type="text" name="pincode" class="form-control my-2" placeholder="Pincode *" required>
-                <button type="submit" class="btn btn-primary">Save Changes</button>
-            </form>
-            </div> {% endcomment %}
-        </div>
-        </div>
-    </div>
-  
- 
-  
+
     <section class="pt-150 pb-150">
         <div class="container">
             <div class="row">
@@ -183,31 +153,7 @@
                                     </div>
                                     {% endif %}
                                 </div>
-                                {% comment %} <div class="tab-pane fade" id="track-orders" role="tabpanel" aria-labelledby="track-orders-tab">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">Orders tracking</h5>
-                                        </div>
-                                        <div class="card-body contact-from-area">
-                                            <p>To track your order please enter your OrderID in the box below and press "Track" button. This was given to you on your receipt and in the confirmation email you should have received.</p>
-                                            <div class="row">
-                                                <div class="col-lg-8">
-                                                    <form class="contact-form-style mt-30 mb-50" action="#" method="post">
-                                                        <div class="input-style mb-20">
-                                                            <label>Order ID</label>
-                                                            <input name="order-id" placeholder="Found in your order confirmation email" type="text" class="square">
-                                                        </div>
-                                                        <div class="input-style mb-20">
-                                                            <label>Billing email</label>
-                                                            <input name="billing-email" placeholder="Email you used during checkout" type="email" class="square">
-                                                        </div>
-                                                        <button class="submit submit-auto-width" type="submit">Track</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> {% endcomment %}
+                                
                                 <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
                                     {% if not addresses %}
                                         <!-- Add this button inside the 'address' tab pane -->
@@ -230,9 +176,9 @@
                                                         <br>{{address.state}},{{address.country}} 
                                                         <br>{{address.pincode}}
                                                     </address>
-                                                    <button class="btn" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                                                    {% comment %} <button class="btn" data-bs-toggle="modal" data-bs-target="#addAddressModal">
                                                      Edit
-                                                    </button>
+                                                    </button> {% endcomment %}
                                                     
                                                 </div>
                                             </div>
@@ -241,24 +187,13 @@
                                             {% comment %} <a href="{% url 'address' %}}" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Add New Address</a> {% endcomment %}
                                         </div>
                                         {% endfor %}
-                                        <button class="btn" id="add-address-btn" data-bs-toggle="modal" data-bs-target="#addAddressModal">
-                                            <i class="fi-rs-box-alt mr-10"></i> Add New Address
-                                        </button>
-                                        {% comment %} <div class="col-lg-6">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h5 class="mb-0">Shipping Address</h5>
-                                                </div>
-                                                <div class="card-body">
-                                                    <address>4299 Express Lane<br>
-                                                        Sarasota, <br>FL 34249 USA <br>Phone: 1.941.227.4444</address>
-                                                    <p>Sarasota</p>
-                                                    <a href="#" class="btn-small">Edit</a>
-                                                </div>
-                                            </div>
-                                        </div> {% endcomment %}
+                                        
+
                                         
                                     </div>
+                                    <button class="btn  btn-sm" id="add-address-btn" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                                         Add New Address
+                                    </button>
                                     {% endif %}
                                     
                                 </div>
@@ -276,64 +211,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {% comment %} <div class="col-lg-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h5 class="mb-0">Shipping Address</h5>
-                                            </div>
-                                            <div class="card-body">
-                                                <address>4299 Express Lane<br>
-                                                    Sarasota, <br>FL 34249 USA <br>Phone: 1.941.227.4444</address>
-                                                <p>Sarasota</p>
-                                                <a href="#" class="btn-small">Edit</a>
-                                            </div>
-                                        </div>
-                                    </div> {% endcomment %}
+                                   
                                 </div>
                                 
-                                    {% comment %} <div class="card">
-                                        <div class="card-header">
-                                            <h5>Account Details</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>Already have an account? <a href="page-login-register.html">Log in instead!</a></p>
-                                            <form method="post" name="enq">
-                                                <div class="row">
-                                                    <div class="form-group col-md-6">
-                                                        <label>First Name <span class="required">*</span></label>
-                                                        <input required="" class="form-control square" name="name" type="text">
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <label>Last Name <span class="required">*</span></label>
-                                                        <input required="" class="form-control square" name="phone">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label>Display Name <span class="required">*</span></label>
-                                                        <input required="" class="form-control square" name="dname" type="text">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label>Email Address <span class="required">*</span></label>
-                                                        <input required="" class="form-control square" name="email" type="email">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label>Current Password <span class="required">*</span></label>
-                                                        <input required="" class="form-control square" name="password" type="password">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label>New Password <span class="required">*</span></label>
-                                                        <input required="" class="form-control square" name="npassword" type="password">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label>Confirm Password <span class="required">*</span></label>
-                                                        <input required="" class="form-control square" name="cpassword" type="password">
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div> {% endcomment %}
                                 </div>
                             </div>
                         </div>
