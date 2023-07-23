@@ -26,7 +26,6 @@
             </button>
             </div>
             <div class="modal-body">
-                {% if not address.id %}
                 <form id="addAddressForm" action="{% url 'add_address' %}" method="POST">
                     {% csrf_token %}
                     <input type="text" name="first_name" class="form-control my-2" placeholder="First Name" required>
@@ -39,29 +38,40 @@
                     <input type="text" name="state" class="form-control my-2" placeholder="State*" required>
                     <input type="text" name="country" class="form-control my-2" placeholder="Country*" required>
                     <input type="text" name="pincode" class="form-control my-2" placeholder="Pincode *" required>
-                    <button type="submit" class="btn btn-primary">Add Address</button>
+                    <button type="submit" class="btn btn-primary">Add address</button>
                 </form>
 
-                {% else %}
-                <form id="addAddressForm" action="{% url 'edit_address' address.id %}" method="POST">
+            </div>
+        </div>
+        </div>
+    </div>
+
+<!-- edit Address Modal -->
+    <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="editAddressModalLabel">Add Address</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <form id="editAddressForm"  action="" method="POST">
                     {% csrf_token %}
                     <input type="text" name="first_name" class="form-control my-2" placeholder="First Name" required>
                     <input type="text" name="last_name" class="form-control my-2" placeholder="Last Name" required>
                     <input type="text" name="email" class="form-control my-2" placeholder="Email address *" required>
                     <input type="text" name="phone" class="form-control my-2" placeholder="Phone Number *" required>
                     <input type="text" name="address_line_1" class="form-control my-2" placeholder="House No & Locality *" required>
-                    <input type="text" name="address_line_2" class="form-control my-2" placeholder="House No & Locality2 *" required>
+                    {% comment %} <input type="text" name="address_line_2" class="form-control my-2" placeholder="House No & Locality2 *" required> {% endcomment %}
                     <input type="text" name="city" class="form-control my-2" placeholder="City*" required>
                     <input type="text" name="state" class="form-control my-2" placeholder="State*" required>
                     <input type="text" name="country" class="form-control my-2" placeholder="Country*" required>
                     <input type="text" name="pincode" class="form-control my-2" placeholder="Pincode *" required>
-                
-                    <button type="submit" class="btn btn-primary">Add Address</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </form>
-               
-                {% endif %}
-          
-            
+
             </div>
         </div>
         </div>
@@ -176,13 +186,14 @@
                                                         <br>{{address.state}},{{address.country}} 
                                                         <br>{{address.pincode}}
                                                     </address>
-                                                    {% comment %} <button class="btn" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                                                    {% comment %} <button class="btn" data-bs-toggle="modal" data-bs-target="#editAddressModal" onclick="getAddressFromBackend({{address.id}})">
                                                      Edit
                                                     </button> {% endcomment %}
                                                     
                                                 </div>
                                             </div>
-                                            
+{% comment %} 
+                                            <div id="address-data{{address.id}}" data-edit-url="{% url 'edit_address' address.id %}"></div> {% endcomment %}
                                             
                                             {% comment %} <a href="{% url 'address' %}}" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Add New Address</a> {% endcomment %}
                                         </div>
@@ -223,6 +234,57 @@
         </div>
     </section>
     <script>
+        {% comment %} 
+        //update the address
+        document.getElementById('editAddressForm').addEventListener('submit', function (event) {
+            event.preventDefault(); 
+            
+            let form = event.target;
+            let formData = new FormData(form);
+            
+            
+            fetch(`/profile/update_address/${addressId}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                },
+                body: formData,
+            }).then(async (res) => {
+                if (res.ok) {
+                    console.log('Form data successfully updated in the backend.');
+                } else {
+                    console.error('Failed to update form data in the backend.');
+                }
+            });
+        });
+ {% endcomment %}
+
+        var addressId ;
+        //get correct address for update the address
+        function getAddressFromBackend(id){
+            let eUrl = document.getElementById(`address-data${id}`).getAttribute('data-edit-url');
+            console.log(eUrl)
+            fetch(eUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                }
+            }).then(async (res)=>{
+                res = await res.json();
+                console.log(res.address);
+                document.getElementById('editAddressForm').elements['first_name'].value = res.address.first_name;
+                document.getElementById('editAddressForm').elements['last_name'].value = res.address.last_name;
+                document.getElementById('editAddressForm').elements['email'].value = res.address.email;
+                document.getElementById('editAddressForm').elements['phone'].value = res.address.phone;
+                document.getElementById('editAddressForm').elements['address_line_1'].value = res.address.address_line;
+                document.getElementById('editAddressForm').elements['city'].value = res.address.city;
+                document.getElementById('editAddressForm').elements['state'].value = res.address.state;
+                document.getElementById('editAddressForm').elements['country'].value = res.address.country;
+                document.getElementById('editAddressForm').elements['pincode'].value = res.address.pincode;
+            })
+        }
+
         // Get the CSRF token from the cookie
         function getCookie(name) {
             var cookieValue = null;

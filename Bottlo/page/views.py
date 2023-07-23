@@ -99,6 +99,7 @@ def add_address(request):
     if request.method == "POST":
         form_data = json.loads(request.body.decode('utf-8'))
         form = AddressForm(form_data)
+        print(form)
         if form.is_valid():
             address = form.save(commit=False)
             address.user = request.user
@@ -110,17 +111,37 @@ def add_address(request):
     return JsonResponse({'success': False})
 
 
-def edit_address(request,id):
-    address = get_object_or_404(AddressBook,id=id, user=request.user)
-    print(address)
-    if request.method == "POST":
-        form_data = json.loads(request.body.decode('utf-8'))
-        form = AddressForm(form_data,instance=address)
-        if form.is_valid():
-            address = form.save(commit=False)
-            address.save()
-            return JsonResponse({'success': True})
-        else:
-            return JsonResponse({'success': False})
+# def edit_address(request,id):
+#     address = get_object_or_404(AddressBook,id=id)
+#     print(address)
+#     if request.method == "POST":
+#         form_data = json.loads(request.body.decode('utf-8'))
+#         form = AddressForm(form_data,instance=address)
+#         if form.is_valid():
+#             address = form.save(commit=False)
+#             address.save()
+#             return JsonResponse({'success': True,'form':form,'address':address})
+#         else:
+#             return JsonResponse({'success': False})
     
-    return JsonResponse({'success': False})
+#     return JsonResponse({'success': False})
+ 
+ 
+# def edit_address(request, id):
+#     address = get_object_or_404(AddressBook, id=id)
+#     if request.method == "POST":
+#         address_data = {
+#             'first_name': address.first_name,
+#             'city': address.city,
+#             'last_name': address.last_name,
+#             'state':address.state,
+#             'phone':address.phone_number,
+#             'email':address.email,
+#             'country':address.country,
+#             'pincode':address.pincode,
+#             'address_line':address.addressline,
+#         }
+        
+#         return JsonResponse({'success': True, 'address': address_data})
+
+#     return JsonResponse({'success': False})

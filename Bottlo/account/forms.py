@@ -54,5 +54,5 @@ class AddressForm(forms.ModelForm):
     
     class Meta:
         model = AddressBook
-        fields = ['first_name','last_name','phone','email','address_line_1','address_line_2','city','state','country','pincode','status']
+        fields = ['first_name','last_name','phone','email','address_line_1','city','state','country','pincode','status']
         exclude = ("user",)

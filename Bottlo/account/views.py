@@ -91,7 +91,7 @@ def login(request):
                     if is_cart_item_exists:
                         cart_items = Cartitem.objects.filter(cart=cart)
                         for item in cart_items:
-                            item.user = myuser
+                            item.user = myuser 
                             item.save()
                 except:
                     pass
