@@ -10,6 +10,7 @@ from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 import json
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
@@ -34,7 +35,7 @@ def contact_us(request):
 def custom_404(request, exception):
     return render(request, '404.html', status=404)
 
-
+@login_required(login_url='login')
 def profile(request):
     user = request.user
     orders = Order.objects.filter(user=user).order_by('-created_at')

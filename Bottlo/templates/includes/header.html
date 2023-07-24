@@ -66,17 +66,12 @@
                 <div class="single-mobile-header-info mt-30">
                     <a href="page-contact.html">Our location</a>
                 </div>
-                {% if user %}
-                    <h4>Welcome, {{ user.first_name }}</h4>
+                
                     <div class="single-mobile-header-info">
-                        <a href="#">(+01) - 2345 - 6789</a>
-                    </div>
-                {% else %}
-                    <div class="single-mobile-header-info">
-                        <a href="{% url 'login' %}">Log In |</a>
+                        <a href="{% url 'login' %}">Log In </a>
                         <a href="{% url 'signup' %}">Sign Up</a>
                     </div>
-                {% endif %}
+              
             
             
                 <div class="single-mobile-header-info">
